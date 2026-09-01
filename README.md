@@ -1,5 +1,11 @@
 # plotastro
 
+[![PyPI](https://img.shields.io/pypi/v/plotastro.svg)](https://pypi.org/project/plotastro/)
+[![Python versions](https://img.shields.io/pypi/pyversions/plotastro.svg)](https://pypi.org/project/plotastro/)
+[![CI](https://github.com/BehnoodBandi/plotastro/actions/workflows/ci.yml/badge.svg)](https://github.com/BehnoodBandi/plotastro/actions/workflows/ci.yml)
+[![Docs](https://readthedocs.org/projects/plotastro/badge/?version=latest)](https://plotastro.readthedocs.io)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 **Publication-quality matplotlib figures for astronomy journals.**
 
 One `pip install` gives you journal-matched styles for **MNRAS**, **RASTI**,
