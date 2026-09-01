@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "plotastro"
-version = "1.0.0"
+version = "1.0.1"
 description = "Publication-quality matplotlib styles and helpers for astronomy journals (MNRAS, A&A, ApJ, OJA, PRD, JCAP, Nature Astronomy)"
 readme = "README.md"
 license = { text = "MIT" }
