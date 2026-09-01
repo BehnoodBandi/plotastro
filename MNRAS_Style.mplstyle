@@ -82,7 +82,7 @@ text.latex.preamble : \usepackage{mathptmx} \usepackage{mathastext}
                             # IMPROPER USE OF THIS FEATURE WILL LEAD TO LATEX FAILURES
                             # AND IS THEREFORE UNSUPPORTED. PLEASE DO NOT ASK FOR HELP
                             # IF THIS FEATURE DOES NOT DO WHAT YOU EXPECT IT TO.
-                            # preamble is a comma separated list of LaTeX statements
+                            # preamble is a comma-separated list of LaTeX statements
                             # that are included in the LaTeX document preamble.
                             # An example:
                             # text.latex.preamble : \usepackage{bm},\usepackage{euler}
@@ -93,8 +93,8 @@ text.latex.preamble : \usepackage{mathptmx} \usepackage{mathastext}
 
 
 ### FIGURE
-figure.figsize   	 : 6.973848069738481, 4.310075139476229 ## figure size in inche
-figure.subplot.hspace: 0.01
+figure.figsize   	    : 3.32088003, 2.0524167330839185 ## figure size in inches
+figure.subplot.hspace : 0.01
 
 ### IMAGES
 image.cmap			: viridis
