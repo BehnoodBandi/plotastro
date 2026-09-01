@@ -1,37 +1,46 @@
-def set_size(width, fraction=1):
-    """
-	Set aesthetic figure dimensions to avoid scaling in latex.
+def set_size(width='mnras', fraction=1, subplots=(1, 1), hight_ratio=1):
+    """Set figure dimensions to avoid scaling in LaTeX.
 
     Parameters
     ----------
-    width: 		float
-            	width in pts
-    fraction:	float
-            	fraction of the width which you wish the figure to occupy
-
+    width: float or string
+            Document width in points, or string of predined document type
+    fraction: float, optional
+            Fraction of the width which you wish the figure to occupy
+    subplots: array-like, optional
+            The number of rows and columns of subplots. (nrows, ncols)
     Returns
     -------
-    fig_dim: 	tuple
-            	Dimensions of figure in inches
-
-	Credits
-	-------
-	This function is taken from https://jwalton.info/Embed-Publication-Matplotlib-Latex/
+    fig_dim: tuple
+            Dimensions of figure in inches
     """
-    # Width of figure
-    fig_width_pt = width * fraction
+    if width == 'thesis':
+        width_pt = 426.79135
+    
+    elif width == 'beamer':
+        width_pt = 307.28987
 
+    elif width == 'mnras':
+        width_pt = 240
+
+    elif width == 'mnras_full':
+        width_pt = 500
+
+    else:
+        width_pt = width
+
+    # Width of figure (in pts)
+    fig_width_pt = width_pt * fraction
     # Convert from pt to inches
     inches_per_pt = 1 / 72.27
 
     # Golden ratio to set aesthetic figure height
+    # https://disq.us/p/2940ij3
     golden_ratio = (5**.5 - 1) / 2
 
     # Figure width in inches
     fig_width_in = fig_width_pt * inches_per_pt
     # Figure height in inches
-    fig_height_in = fig_width_in * golden_ratio
+    fig_height_in = fig_width_in * golden_ratio * (subplots[0] / subplots[1]) * hight_ratio
 
-    fig_dim = (fig_width_in, fig_height_in)
-
-    return fig_dim
+    return (fig_width_in, fig_height_in)
