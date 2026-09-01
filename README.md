@@ -42,7 +42,8 @@ pa.savefig("myplot")             # -> myplot.pdf, ready for \includegraphics
 |---|---|
 | ![single-column example](examples/figures/example_column.png) | ![full-width example](examples/figures/example_full.png) |
 
-**Start with the [tutorial notebook](examples/tutorial.ipynb)** — it walks
+**Full documentation: [plotastro.readthedocs.io](https://plotastro.readthedocs.io)** —
+or start with the [tutorial notebook](examples/tutorial.ipynb), which walks
 through every feature with runnable examples.
 
 ## Why this exists

@@ -6,3 +6,6 @@ build/
 *.egg-info/
 .pytest_cache/
 .venv/
+docs/_build/
+docs/_figures/
+docs/tutorial.ipynb

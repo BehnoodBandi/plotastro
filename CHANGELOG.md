@@ -35,6 +35,9 @@ First release as an installable package, `plotastro`.
   and 2.x both supported and tested in CI.
 - Tests (pytest), CI and PyPI-publishing GitHub Actions workflows,
   executed tutorial notebook, MIT license.
+- Documentation site (Sphinx + Furo on Read the Docs) with the rendered
+  tutorial notebook and a full API reference:
+  <https://plotastro.readthedocs.io>.
 
 ### Changed
 - Styles no longer require LaTeX: portable STIX mathtext by default,
