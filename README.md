@@ -388,7 +388,7 @@ files (CI checks they stay in sync). Releases: bump the version in
 ## Credits
 
 - Original MNRAS style this grew from:
-  [M. Knabenhans' mplstyle_for_MNRAS](https://github.com/mischakn/mplstyle_for_MNRAS)
+  [M. Knabenhans' mplstyle_for_MNRAS](https://github.com/miknab/mplstyle_for_MNRAS)
 - Colour-blind-friendly Set1 ordering:
   [Thøger Rivera-Thorsen](https://gist.github.com/thriveth/8560036);
   light colours from Tableau *Color Blind 10*
