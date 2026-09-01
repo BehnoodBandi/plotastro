@@ -14,7 +14,7 @@ directory, just execute the commands
 `import matplotlib as mpl`</br>
 `print mpl.get_configdir()`
 
-in ipython or a python script. Make sure that this directory is in your `PYTHONPATH`.
+#### MNRAS column fig width = 3.32088003 inch ,  width_pt = 240
+#### The Height isn't important, but myfigsize.py gives height with the golden ratio; try it.
 
-### COMPATIBILITY
-Notice that this version is only compatible with python 2.7.
+### This style changes the default colours to a colour-blind-friendly palette; let's be nice to everyone.
