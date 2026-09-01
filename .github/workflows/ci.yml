@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        python-version: ["3.9", "3.11", "3.13"]
+        numpy: [""]
+        include:
+          - os: macos-latest
+            python-version: "3.12"
+          - os: windows-latest
+            python-version: "3.12"
+          # plotastro supports both NumPy major versions — test each explicitly
+          - os: ubuntu-latest
+            python-version: "3.11"
+            numpy: "numpy<2"
+          - os: ubuntu-latest
+            python-version: "3.12"
+            numpy: "numpy>=2"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install package with test dependencies
+        shell: bash
+        run: |
+          python -m pip install ".[dev]"
+          if [ -n "${{ matrix.numpy }}" ]; then
+            python -m pip install "${{ matrix.numpy }}"
+          fi
+      - name: Run tests
+        run: pytest -v
+      - name: Check style files are in sync with the generator
+        if: runner.os == 'Linux'
+        run: |
+          python tools/generate_styles.py
+          git diff --exit-code src/plotastro/styles/

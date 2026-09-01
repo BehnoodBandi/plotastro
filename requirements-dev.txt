@@ -1,0 +1,5 @@
+# Development / examples requirements (pip install -r requirements-dev.txt).
+-r requirements.txt
+numpy
+pytest
+jupyter

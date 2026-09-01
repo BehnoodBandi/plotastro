@@ -1,0 +1,3 @@
+# Runtime requirements (pip install -r requirements.txt).
+# plotastro works with both NumPy 1.x and 2.x (numpy comes in via matplotlib).
+matplotlib>=3.5

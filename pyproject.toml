@@ -1,0 +1,42 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "plotastro"
+version = "1.0.0"
+description = "Publication-quality matplotlib styles and helpers for astronomy journals (MNRAS, A&A, ApJ, OJA, PRD, JCAP, Nature Astronomy)"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Behnood Bandi", email = "b.bandi@sussex.ac.uk" }]
+requires-python = ">=3.9"
+dependencies = ["matplotlib>=3.5"]
+keywords = [
+    "matplotlib", "plotting", "astronomy", "publication",
+    "mnras", "apj", "aanda", "colorblind", "figures",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Framework :: Matplotlib",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Astronomy",
+    "Topic :: Scientific/Engineering :: Visualization",
+]
+
+[project.scripts]
+plotastro-authors = "plotastro._authors:main"
+
+[project.urls]
+Homepage = "https://github.com/BehnoodBandi/mplstyle_for_MNRAS"
+Issues = "https://github.com/BehnoodBandi/mplstyle_for_MNRAS/issues"
+
+[project.optional-dependencies]
+dev = ["pytest", "numpy"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/plotastro"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
