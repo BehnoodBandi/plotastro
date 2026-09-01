@@ -29,8 +29,8 @@ classifiers = [
 plotastro-authors = "plotastro._authors:main"
 
 [project.urls]
-Homepage = "https://github.com/BehnoodBandi/mplstyle_for_MNRAS"
-Issues = "https://github.com/BehnoodBandi/mplstyle_for_MNRAS/issues"
+Homepage = "https://github.com/BehnoodBandi/plotastro"
+Issues = "https://github.com/BehnoodBandi/plotastro/issues"
 
 [project.optional-dependencies]
 dev = ["pytest", "numpy"]
