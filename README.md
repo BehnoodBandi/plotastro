@@ -1,5 +1,5 @@
 # mplstyle_for_MNRAS
-This repository contains a matplotlib (mpl) stylesheet which (when imported) creates plots looking nice in MNRAS (Monthly Notices of the Royal Astronomical Society) papers.
+This repository contains a matplotlib (mpl) stylesheet which (when imported) creates plots looking nice in MNRAS (Monthly Notices of the Royal Astronomical Society) papers, following MNRAS's official guidelines: https://academic.oup.com/mnras/pages/general_instructions!
 
 ### WHERE TO STORE THE FILE AND HOW TO IMPORT IT
 An easy way to use the file is to save it together with the Python script producing the plot (in the same directory). Then,
