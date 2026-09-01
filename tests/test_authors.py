@@ -116,10 +116,16 @@ def test_only_corresponding_author_gets_thanks():
 
 def test_reads_example_csv():
     tex = pa.authorlist(EXAMPLE, journal="mnras")
+    # corresponding author only (everyone has an email in this list)
     assert "Behnood Bandi,$^{1}$\\thanks{E-mail: b.bandi@sussex.ac.uk}" in tex
-    assert "Giulia Rossi$^{1,3}$" in tex              # merged from two rows
-    assert r"Aur\'{e}lie Dupont" in tex               # accents preserved
+    assert tex.count("\\thanks") == 1
+    # Rocher & Verdier share EPFL (2); Bandi & Loveday share Sussex (1)
+    assert "Antoine Rocher,$^{2}$" in tex
+    assert r"Aur\'{e}lien Verdier,$^{2}$" in tex      # accents preserved
+    assert "Jon Loveday$^{1}$" in tex                 # 'Jon ' space stripped
+    assert "and Michael Brown$^{4}$" in tex
     assert "$^{4}$" in tex and "$^{5}$" not in tex    # 4 unique affiliations
+    assert tex.count("University of Sussex") == 1     # shared, listed once
 
 
 def test_empty_csv_raises(tmp_path):

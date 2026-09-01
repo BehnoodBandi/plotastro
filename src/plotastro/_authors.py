@@ -11,11 +11,12 @@ collaboration bookkeeping like ``JoinedAsBuilder`` is fine):
     ORCID          optional
     Email          optional; authors with an email are marked corresponding
 
-Example (a typical collaboration list)::
+Example (a typical collaboration list — see examples/authors_example.csv
+for the full file)::
 
     Lastname,Firstname,Authorname,Email,JoinedAsBuilder,Affiliation,ORCID,
     Bandi,Behnood,Behnood Bandi, b.bandi@sussex.ac.uk, False,"Astronomy Centre, University of Sussex, Falmer, Brighton BN1 9QH, UK",0000-0001-5838-3903,
-    Dupont,Aur\\'{e}lie,Aur\\'{e}lie Dupont,,False,"CRAL, Universit\\'{e} de Lyon, France",0000-0002-1825-0097,
+    Rocher,Antoine,Antoine Rocher,antoine.rocher@epfl.ch,False,"EPFL, \\'{E}cole polytechnique f\\'{e}d\\'{e}rale de Lausanne, Chemin des Maillettes, 51, 1290 Versoix, Switzerland",0000-0003-4349-6424,
 
 Notes:
 
