@@ -47,17 +47,25 @@ lines.linewidth   : 1.5			# line width in points
 # 10 pt is the standard value.
 #
 font.family         : serif
-font.style          : italic
+font.style          : normal
 font.variant        : normal
-font.weight         : medium
-font.stretch        : normal
+font.weight         : normal
+font.stretch        : semi-expanded
 # note that font.size controls default text sizes.  To configure
 # special text sizes tick labels, axes, labels, title, etc, see the rc
 # settings for axes and ticks. Special text sizes can be defined
 # relative to font.size, using the following values: xx-small, x-small,
 # small, medium, large, x-large, xx-large, larger, or smaller
-font.size            : 12.0
-font.serif           : Times 
+font.size            : 9
+# font.serif           : 'Times New Roman' 
+
+axes.titlesize       : medium
+xtick.labelsize      : medium
+ytick.labelsize      : medium
+figure.titlesize     : medium
+
+legend.fontsize      : x-small
+legend.title_fontsize: x-small
 
 ### LaTeX customizations. See http://wiki.scipy.org/Cookbook/Matplotlib/UsingTex
 text.usetex         : True  # use latex for all text handling. The following fonts
@@ -70,7 +78,8 @@ text.usetex         : True  # use latex for all text handling. The following fon
                               # LaTeX \usepackage command, please inquire at the
                               # matplotlib mailing list
 
-text.latex.preamble : \usepackage{mathptmx} # IMPROPER USE OF THIS FEATURE WILL LEAD TO LATEX FAILURES
+text.latex.preamble : \usepackage{mathptmx} \usepackage{mathastext}
+                            # IMPROPER USE OF THIS FEATURE WILL LEAD TO LATEX FAILURES
                             # AND IS THEREFORE UNSUPPORTED. PLEASE DO NOT ASK FOR HELP
                             # IF THIS FEATURE DOES NOT DO WHAT YOU EXPECT IT TO.
                             # preamble is a comma separated list of LaTeX statements
@@ -96,36 +105,40 @@ image.cmap			: viridis
 axes.linewidth      : 0.65     # edge linewidth
 axes.grid           : True   # display grid or not
 
-axes.xmargin        : .0  # x margin.  See `axes.Axes.margins`
-axes.ymargin        : .0  # y margin See `axes.Axes.margins`
+axes.xmargin        : .05  # x margin.  See `axes.Axes.margins`
+axes.ymargin        : .05  # y margin See `axes.Axes.margins`
+
+axes.prop_cycle     : cycler('color', ['377eb8', 'ff7f00', '4daf4a', 'f781bf', 'a65628', '984ea3', '999999', 'e41a1c', 'dede00', 'A2C8EC', 'FFBC79', 'ABABAB'])
 
 ### TICKS
 # see http://matplotlib.org/api/axis_api.html#matplotlib.axis.Tick
-xtick.top            : True   # draw ticks on the top side
+xtick.top            : False   # draw ticks on the top side
 xtick.bottom         : True   # draw ticks on the bottom side
-xtick.major.size     : 7      # major tick size in points
-xtick.minor.size     : 4      # minor tick size in points
+xtick.major.size     : 4      # major tick size in points
+xtick.minor.size     : 2      # minor tick size in points
 xtick.major.width    : 0.5    # major tick width in points
-xtick.minor.width    : 0.35    # minor tick width in points
-xtick.direction      : in    # direction: in, out, or inout
-xtick.minor.visible  : True  # visibility of minor ticks on x-axis
+xtick.minor.width    : 0.35   # minor tick width in points
+xtick.direction      : in     # direction: in, out, or inout
+xtick.minor.visible  : True   # visibility of minor ticks on x-axis
 
 ytick.left           : True   # draw ticks on the left side
-ytick.right          : True  # draw ticks on the right side
-ytick.major.size     : 7      # major tick size in points
-ytick.minor.size     : 4      # minor tick size in points
+ytick.right          : False   # draw ticks on the right side
+ytick.major.size     : 4      # major tick size in points
+ytick.minor.size     : 2.5      # minor tick size in points
 ytick.major.width    : 0.5    # major tick width in points
-ytick.minor.width    : 0.35    # minor tick width in points
-ytick.direction      : in    # direction: in, out, or inout
-ytick.minor.visible  : True  # visibility of minor ticks on y-axis
+ytick.minor.width    : 0.35   # minor tick width in points
+ytick.direction      : in     # direction: in, out, or inout
+ytick.minor.visible  : True   # visibility of minor ticks on y-axis
 
 ### SAVING FORMAT
 # the default savefig params can be different from the display params
 # e.g., you may want a higher resolution, or to make the figure
 # background white
-savefig.format      : pdf      # png, ps, pdf, svg
-savefig.bbox        : tight    # 'tight' or 'standard'.
+savefig.format      : png      # png, ps, pdf, svg
+savefig.bbox        : standard # 'tight' or 'standard'.
                                # 'tight' is incompatible with pipe-based animation
                                # backends but will workd with temporary file based ones:
                                # e.g. setting animation.writer to ffmpeg will not work,
                                # use ffmpeg_file instead
+savefig.dpi         : 450
+figure.dpi          : 250
