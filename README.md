@@ -247,6 +247,12 @@ map with a fixed number of lines, sample exactly that many:
 `pa.cmasher_colors("rainforest", n=len(models))`. Please cite CMasher if
 you use it (`cmasher.get_bibtex()`).
 
+The [colours page of the documentation](https://plotastro.readthedocs.io/en/latest/colors.html)
+has more: which map suits which kind of data, lines coloured by a
+parameter with a colour bar, diverging and cyclic data, and common
+errors. The [tutorial notebook](examples/tutorial.ipynb) runs the same
+examples.
+
 ### Checking accessibility yourself
 
 ![CVD check](examples/figures/cvd_check.png)
