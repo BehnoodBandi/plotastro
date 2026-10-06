@@ -1,9 +1,11 @@
-"""Palettes, colour utilities and colour-vision-deficiency checking."""
+"""Palettes, colour utilities, colour-vision-deficiency checking and the
+optional CMasher colormaps."""
 
 from __future__ import annotations
 
 import colorsys
 
+import matplotlib
 import matplotlib.colors as mcolors
 import matplotlib.pyplot as plt
 import numpy as np
@@ -164,9 +166,151 @@ def euclid_colors(scheme="categorical1", n=8):
         "categorical2, categorical3, sequential, diverging")
 
 
+# ----------------------------------------------------------------------
+# CMasher colormaps (optional dependency)
+# ----------------------------------------------------------------------
+
+def _import_cmasher():
+    """Import CMasher on first use, so plotastro never requires it."""
+    try:
+        import cmasher
+    except ImportError:
+        raise ImportError(
+            "This feature needs the optional CMasher package "
+            "(https://cmasher.readthedocs.io): pip install cmasher, or "
+            "pip install 'plotastro[cmasher]'") from None
+    return cmasher
+
+
+def _is_cmasher_name(spec):
+    return isinstance(spec, str) and spec.strip().lower().startswith("cmr.")
+
+
+def _cmasher_name(cmap):
+    """A CMasher colormap name, with or without the ``cmr.`` prefix -> the
+    ``"cmr.<name>"`` under which importing CMasher registers it with
+    matplotlib (checked)."""
+    _import_cmasher()
+    name = str(cmap).strip().lower()
+    if not name.startswith("cmr."):
+        name = f"cmr.{name}"
+    if name not in matplotlib.colormaps:
+        raise ValueError(
+            f"Unknown CMasher colormap {cmap!r}. cmasher.get_cmap_list() lists "
+            "them all (see https://cmasher.readthedocs.io).")
+    return name
+
+
+def _cmasher_cmap(cmap):
+    """A CMasher colormap name or a Colormap -> the Colormap."""
+    if isinstance(cmap, mcolors.Colormap):
+        return cmap
+    return matplotlib.colormaps[_cmasher_name(cmap)]
+
+
+def cmasher_colors(cmap, n=8, *, cmap_range=(0.15, 0.85)):
+    """Discrete colours sampled from a `CMasher
+    <https://cmasher.readthedocs.io>`_ colormap — e.g. a colour cycle for
+    a family of lines. Needs the optional ``cmasher`` package.
+
+    Parameters
+    ----------
+    cmap : str or Colormap
+        A CMasher colormap name, with or without the ``"cmr."`` prefix
+        (``"rainforest"``, ``"cmr.torch_r"``, ...), or a Colormap object.
+    n : int, optional
+        Number of colours (default 8).
+    cmap_range : (float, float), optional
+        Part of the colormap to sample, in [0, 1]. The default
+        ``(0.15, 0.85)`` follows CMasher's own advice for line colours:
+        most of its sequential maps run from black to white, and those
+        ends vanish against the axes or the white page.
+
+    Returns
+    -------
+    list of str : ``n`` hex colours, equally spaced in ``cmap_range``.
+
+    Notes
+    -----
+    Sequential maps make the best line colours. For lines that should be
+    easy to tell apart, CMasher recommends maps with a large perceptual
+    range (``apple``, ``chroma``, ``neon``, ``rainforest``, ``torch``);
+    for lines that are steps of one quantity, a single-hue map
+    (``flamingo``, ``freeze``, ``gothic``, ``jungle``, ``ocean``).
+    Most diverging maps have a white or black centre, which the middle
+    colours approach.
+
+    Examples
+    --------
+    >>> pa.set_style("mnras", palette="cmr.rainforest")         # 8 colours
+    >>> ax.set_prop_cycle(color=pa.cmasher_colors("torch", n=5))
+    """
+    n = int(n)
+    if n < 1:
+        raise ValueError("n must be a positive integer")
+    cmr = _import_cmasher()
+    return [c.lower() for c in cmr.take_cmap_colors(
+        _cmasher_cmap(cmap), n, cmap_range=tuple(cmap_range), return_fmt="hex")]
+
+
+def cmasher_cmap(cmap, *, cmap_range=None, n=None):
+    """A `CMasher <https://cmasher.readthedocs.io>`_ colormap, optionally
+    cut to part of its range or split into ``n`` discrete colours. Needs
+    the optional ``cmasher`` package.
+
+    Parameters
+    ----------
+    cmap : str or Colormap
+        A CMasher colormap name, with or without the ``"cmr."`` prefix —
+        e.g. ``"rainforest"``, ``"cmr.iceburn"``, ``"ocean_r"`` — or a
+        Colormap object.
+    cmap_range : (float, float), optional
+        Keep only this part of the colormap (in [0, 1]), e.g.
+        ``(0.15, 0.85)`` to drop the black and white ends. CMasher
+        advises keeping at least half of a sequential map, so that it
+        stays smooth.
+    n : int, optional
+        Split the map into ``n`` discrete colours — for filled contours
+        or binned data.
+
+    Returns
+    -------
+    matplotlib.colors.Colormap
+
+    Examples
+    --------
+    >>> ax.imshow(img, cmap=pa.cmasher_cmap("rainforest"))
+    >>> ax.contourf(x, y, z, levels=6, cmap=pa.cmasher_cmap("iceburn", n=6))
+
+    Once CMasher has been imported (by this function, by
+    ``set_style(cmap=...)``, or by you), its maps can also be passed to
+    matplotlib by name: ``cmap="cmr.rainforest"``.
+    """
+    colormap = _cmasher_cmap(cmap)
+    if cmap_range is None and n is None:
+        return colormap
+    cmr = _import_cmasher()
+    start, stop = cmap_range if cmap_range is not None else (0, 1)
+    return cmr.get_sub_cmap(colormap, start, stop,
+                            N=None if n is None else int(n))
+
+
+def _resolve_cmap(spec):
+    """A colormap name (``"cmr.<name>"`` loads CMasher) -> the name, checked."""
+    if _is_cmasher_name(spec):
+        return _cmasher_name(spec)
+    if spec not in matplotlib.colormaps:
+        raise ValueError(
+            f"Unknown colormap {spec!r}. Use a matplotlib colormap name, or "
+            "'cmr.<name>' for a CMasher colormap.")
+    return spec
+
+
 def _resolve_palette(spec):
     """A palette name, a dict of colours or any sequence of colours -> list."""
     if isinstance(spec, str):
+        if _is_cmasher_name(spec):
+            return cmasher_colors(spec)
         key = _normalise(spec)
         if key in _NAMED_PALETTES:
             return list(_NAMED_PALETTES[key])
@@ -177,6 +321,7 @@ def _resolve_palette(spec):
                        "categorical1, categorical2, categorical3, sequential, "
                        "diverging")
             raise ValueError(f"Unknown palette {spec!r}. Choose one of: {options}; "
+                             "'cmr.<name>' for colours from a CMasher colormap; "
                              "or pass a list of colours.") from None
     if isinstance(spec, dict):
         spec = spec.values()

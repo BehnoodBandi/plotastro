@@ -19,7 +19,8 @@ Importing plotastro also registers the styles with matplotlib itself, so
 Supported journals: MNRAS, RASTI, A&A, ApJ/ApJL (AASTeX), the Open Journal
 of Astrophysics, PRD/PRL (REVTeX), JCAP, Nature Astronomy and Euclid
 Consortium papers (the ECEB's niceplots look) — plus "thesis" and "beamer"
-width presets. See the README for the full tutorial.
+width presets. Colours and colormaps from CMasher are an optional extra
+(``pip install cmasher``). See the README for the full tutorial.
 """
 
 from importlib.metadata import PackageNotFoundError, version as _version
@@ -34,7 +35,8 @@ from ._core import (
 )
 from ._colors import (
     COLORS, CYCLE, OKABE_ITO, PAIRED, PETROFF8, PETROFF10, TOL_VIBRANT,
-    check_colors, check_figure, darken, euclid_colors, lighten, simulate_cvd,
+    check_colors, check_figure, cmasher_cmap, cmasher_colors, darken,
+    euclid_colors, lighten, simulate_cvd,
 )
 from ._extras import (
     LINESTYLES, MARKERS,
@@ -51,7 +53,7 @@ __all__ = [
     "authorlist",
     "JOURNALS", "GOLDEN", "STYLE_DIR",
     "COLORS", "CYCLE", "OKABE_ITO", "PETROFF8", "PETROFF10", "TOL_VIBRANT",
-    "PAIRED", "euclid_colors",
+    "PAIRED", "euclid_colors", "cmasher_colors", "cmasher_cmap",
     "lighten", "darken", "simulate_cvd", "check_colors", "check_figure",
     "MARKERS", "LINESTYLES", "style_cycler", "label_panels",
     "show_colors", "show_markers", "show_linestyles",

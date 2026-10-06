@@ -101,6 +101,90 @@ exactly this; with plotastro it's built in.
 The styles default to `viridis` (perceptually uniform, CVD-safe). Good
 picks: `viridis`/`magma`/`cividis` for sequential data, `RdBu_r` or
 `coolwarm` for diverging data (red–*blue*, not red–green). Avoid
-`jet`/`rainbow`. For more astro-friendly maps see
-[cmasher](https://cmasher.readthedocs.io) and
+`jet`/`rainbow`. To change the default for every `imshow`, `pcolormesh`,
+`scatter`, … pass `cmap=` when you activate a style:
+
+```python
+pa.set_style("mnras", cmap="cividis")
+```
+
+For many more maps, plotastro can use CMasher (next section); see also
 [cmocean](https://matplotlib.org/cmocean/).
+
+## CMasher colours and colormaps (optional)
+
+```{image} _figures/cmasher.png
+:alt: A CMasher colour cycle for a family of lines, and a CMasher colormap on an image
+:width: 100%
+```
+
+[CMasher](https://cmasher.readthedocs.io) (van der Velden 2020,
+[JOSS 5, 2004](https://doi.org/10.21105/joss.02004)) is a collection of
+scientific colormaps: sequential, diverging and cyclic, all designed to be
+perceptually uniform, and most of them colour-vision-deficiency friendly.
+plotastro can use them for discrete colours and for colormaps. CMasher is
+**not** a dependency of plotastro: install it only if you want it,
+
+```bash
+pip install cmasher                # or: pip install "plotastro[cmasher]"
+```
+
+and plotastro imports it only when you ask for a CMasher colour. Every
+other feature works the same without it. CMasher names start with
+`cmr.` (`"cmr.rainforest"`, `"cmr.iceburn"`, …), which is also how its
+maps are registered with matplotlib; append `_r` for the reversed map.
+Browse them all in the
+[CMasher colormap overview](https://cmasher.readthedocs.io), or list them
+with `cmasher.get_cmap_list()`.
+
+### Discrete colours
+
+Pass a `"cmr."` name as the palette to get a colour cycle of 8 colours
+sampled from that map, or use {func}`plotastro.cmasher_colors` for a
+different number:
+
+```python
+pa.set_style("mnras", palette="cmr.rainforest")              # 8-colour cycle
+ax.set_prop_cycle(color=pa.cmasher_colors("torch", n=5))     # 5, this axes only
+colors = pa.cmasher_colors("ocean", n=4, cmap_range=(0.2, 0.8))
+```
+
+The colours are hex strings, equally spaced over `cmap_range`. Its default,
+`(0.15, 0.85)`, follows CMasher's own advice: most of its sequential maps
+run from black to white, and those ends disappear against the axes or the
+page. Sequential maps work best for lines. CMasher recommends:
+
+- **for lines that must be easy to tell apart:** maps with a large
+  perceptual range, such as `apple`, `chroma`, `neon`, `rainforest` and
+  `torch`;
+- **for lines that are steps of one quantity** (redshifts, masses, …): a
+  single-hue map, such as `flamingo`, `freeze`, `gothic`, `jungle` and
+  `ocean`.
+
+These cycles are ordered from dark to light, and a matplotlib cycle starts
+at the first colour. So for a fixed number of lines, sample exactly that
+many, `pa.cmasher_colors("rainforest", n=len(models))`, and they will span
+the whole map. Check the result with `pa.check_colors(...)` as for any other
+palette.
+
+### Colormaps
+
+Make a CMasher map the default colormap with `set_style(cmap=...)`, or get
+the colormap itself with {func}`plotastro.cmasher_cmap`. It can also cut
+the map to part of its range, or split it into a few discrete levels:
+
+```python
+pa.set_style("mnras", cmap="cmr.ocean")            # default for imshow etc.
+
+ax.imshow(img, cmap=pa.cmasher_cmap("rainforest"))
+ax.pcolormesh(x, y, z, cmap=pa.cmasher_cmap("ocean", cmap_range=(0.15, 0.85)))
+ax.contourf(x, y, z, levels=6, cmap=pa.cmasher_cmap("iceburn", n=6))
+```
+
+Once CMasher has been imported (by plotastro or by `import cmasher`), every
+matplotlib function also accepts its maps by name: `cmap="cmr.iceburn"`.
+Some of CMasher's diverging maps (`iceburn`, `redshift`, `seaweed`,
+`watermelon`, `wildfire`) have a **black** centre instead of a white one.
+
+If you use CMasher in a paper, please cite it; `cmasher.get_bibtex()`
+prints the reference.

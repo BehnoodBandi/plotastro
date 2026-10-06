@@ -29,6 +29,17 @@ import plotastro as pa
 .. autofunction:: plotastro.euclid_colors
 ```
 
+### CMasher (optional)
+
+These need the optional `cmasher` package (`pip install cmasher`); see
+{doc}`colors`. `set_style(palette="cmr.<name>", cmap="cmr.<name>")` uses
+them too.
+
+```{eval-rst}
+.. autofunction:: plotastro.cmasher_colors
+.. autofunction:: plotastro.cmasher_cmap
+```
+
 ### Palette constants
 
 | name | contents |

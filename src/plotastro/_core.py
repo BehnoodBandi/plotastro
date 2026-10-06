@@ -93,7 +93,7 @@ def current_journal():
 # ----------------------------------------------------------------------
 
 def set_style(journal="mnras", *, usetex=False, grid=None, palette=None,
-              **rc_overrides):
+              cmap=None, **rc_overrides):
     """Activate the plotting style for a journal.
 
     Parameters
@@ -119,7 +119,15 @@ def set_style(journal="mnras", *, usetex=False, grid=None, palette=None,
         ``"petroff8"``, ``"petroff10"``, ``"tol_vibrant"``, or one of the
         Euclid niceplots schemes ``"categorical1"``, ``"categorical2"``,
         ``"categorical3"``, ``"sequential"``, ``"diverging"`` (see
-        :func:`euclid_colors`) — or any list or dict of colours.
+        :func:`euclid_colors`); ``"cmr.<name>"`` for 8 colours sampled
+        from a CMasher colormap (see :func:`cmasher_colors`) — or any
+        list or dict of colours.
+    cmap : str, optional
+        Default colormap for ``imshow``, ``pcolormesh``, ``scatter`` etc.
+        (the styles use ``viridis``): any matplotlib colormap name, or
+        ``"cmr.<name>"`` for a CMasher colormap (see :func:`cmasher_cmap`).
+        CMasher is optional: it is only imported when a ``"cmr."`` name
+        is used here or in ``palette``.
     **rc_overrides
         Any extra rcParams, e.g. ``set_style("mnras", **{"font.size": 10})``.
 
@@ -128,8 +136,16 @@ def set_style(journal="mnras", *, usetex=False, grid=None, palette=None,
     >>> pa.set_style("aanda")
     >>> pa.set_style("mnras", usetex=True, grid=False)
     >>> pa.set_style("euclid", palette="categorical3")
+    >>> pa.set_style("mnras", palette="cmr.rainforest", cmap="cmr.ocean")
     """
     key = _resolve(journal)
+    # Resolve the colours before touching rcParams, so a bad name (or a
+    # missing CMasher) leaves the current style intact. (_colors imports
+    # figsize from here, hence the local import.)
+    from ._colors import _resolve_cmap, _resolve_palette
+    colors = _resolve_palette(palette) if palette is not None else None
+    cmap = _resolve_cmap(cmap) if cmap is not None else None
+
     style_file = STYLE_DIR / f"{JOURNALS[key]['style']}.mplstyle"
     plt.style.use(style_file)
     _state["journal"] = key
@@ -143,9 +159,10 @@ def set_style(journal="mnras", *, usetex=False, grid=None, palette=None,
         })
     if grid is not None:
         mpl.rcParams["axes.grid"] = bool(grid)
-    if palette is not None:
-        from ._colors import _resolve_palette  # (_colors imports figsize from here)
-        mpl.rcParams["axes.prop_cycle"] = cycler(color=_resolve_palette(palette))
+    if colors is not None:
+        mpl.rcParams["axes.prop_cycle"] = cycler(color=colors)
+    if cmap is not None:
+        mpl.rcParams["image.cmap"] = cmap
     if rc_overrides:
         mpl.rcParams.update(rc_overrides)
 

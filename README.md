@@ -127,7 +127,9 @@ nothing is copied from it. How it differs from the other styles:
 `pa.authorlist(..., journal="euclid")` produces the A&A author block.
 
 The only hard dependency is matplotlib; plotastro works with both NumPy 1.x
-and 2.x (CI tests each). Running the examples from a clone?
+and 2.x (CI tests each). [CMasher](https://cmasher.readthedocs.io) colours
+and colormaps are an optional extra (`pip install "plotastro[cmasher]"`; see
+below). Running the examples from a clone?
 `pip install -r requirements-dev.txt`.
 
 ## Tutorial
@@ -209,8 +211,41 @@ ax.set_prop_cycle(color=pa.euclid_colors("sequential", n=6))   # per axes
 **Colormaps:** the styles default to `viridis` (perceptually uniform,
 CVD-safe). Good picks: `viridis`/`magma`/`cividis` for sequential data,
 `RdBu_r` or `coolwarm` for diverging data (red–*blue*, not red–green). Avoid
-`jet`/`rainbow`. For more astro-friendly maps see
-[cmasher](https://cmasher.readthedocs.io) and [cmocean](https://matplotlib.org/cmocean/).
+`jet`/`rainbow`. Change the default with `pa.set_style("mnras", cmap="cividis")`.
+For many more maps, use CMasher (next section) or
+[cmocean](https://matplotlib.org/cmocean/).
+
+### CMasher colours and colormaps (optional)
+
+![CMasher colours and colormaps](examples/figures/cmasher.png)
+
+[CMasher](https://cmasher.readthedocs.io) (van der Velden 2020,
+[JOSS 5, 2004](https://doi.org/10.21105/joss.02004)) is a collection of
+perceptually uniform scientific colormaps (sequential, diverging and
+cyclic), most of them colour-vision-deficiency friendly. plotastro can use
+it for both discrete colours and colormaps, but it is **not a dependency**.
+Install it only if you want it (`pip install cmasher`, or
+`pip install "plotastro[cmasher]"`); plotastro imports it only when you ask
+for a CMasher colour. Names start with `cmr.`, as in CMasher itself:
+
+```python
+pa.set_style("mnras", palette="cmr.rainforest")    # 8-colour cycle from a CMasher map
+pa.set_style("mnras", cmap="cmr.ocean")            # default colormap for imshow etc.
+
+ax.set_prop_cycle(color=pa.cmasher_colors("torch", n=5))       # n discrete colours
+ax.imshow(img, cmap=pa.cmasher_cmap("rainforest"))             # the colormap
+ax.contourf(x, y, z, levels=6, cmap=pa.cmasher_cmap("iceburn", n=6))  # 6 levels
+```
+
+Discrete colours are sampled from `cmap_range=(0.15, 0.85)` by default.
+This follows CMasher's advice, since most of its sequential maps run from
+black to white and those ends vanish on the page. For lines that must be
+easy to tell apart, CMasher suggests `apple`, `chroma`, `neon`,
+`rainforest` or `torch`; for steps of one quantity, a single-hue map such
+as `flamingo`, `freeze`, `gothic`, `jungle` or `ocean`. To span the whole
+map with a fixed number of lines, sample exactly that many:
+`pa.cmasher_colors("rainforest", n=len(models))`. Please cite CMasher if
+you use it (`cmasher.get_bibtex()`).
 
 ### Checking accessibility yourself
 
@@ -387,7 +422,7 @@ complete example.
 
 | | |
 |---|---|
-| `set_style(journal, usetex=, grid=, palette=, **rc)` | activate a journal's style (alias: `use`) |
+| `set_style(journal, usetex=, grid=, palette=, cmap=, **rc)` | activate a journal's style (alias: `use`) |
 | `authorlist(csv, journal=)` | LaTeX author/affiliation block from a CSV (CLI: `plotastro-authors`) |
 | `figsize(width, journal=, fraction=, aspect=, ...)` | journal-correct figure dimensions |
 | `subplots(...)` | `plt.subplots` with the size computed for you |
@@ -396,6 +431,7 @@ complete example.
 | `style_cycler(markers=, linestyles=)` | redundant-encoding property cycle |
 | `COLORS`, `CYCLE`, `OKABE_ITO`, `PETROFF8`, `PETROFF10`, `TOL_VIBRANT`, `PAIRED` | palettes |
 | `euclid_colors(scheme, n=)` | the Euclid niceplots colour schemes, by name |
+| `cmasher_colors(cmap, n=, cmap_range=)`, `cmasher_cmap(cmap, cmap_range=, n=)` | CMasher colours / colormaps (optional `cmasher` package) |
 | `lighten(c, f)`, `darken(c, f)` | matched shades without transparency |
 | `simulate_cvd`, `check_colors`, `check_figure` | colour-vision-deficiency checks |
 | `MARKERS`, `LINESTYLES` | curated marker / dash-pattern sequences |
@@ -453,6 +489,9 @@ files (CI checks they stay in sync). Releases: bump the version in
 - Palettes: [Okabe & Ito](https://jfly.uni-koeln.de/color/),
   [Petroff (2021)](https://arxiv.org/abs/2107.02270),
   [Paul Tol](https://personal.sron.nl/~pault/), ColorBrewer *Paired*
+- Optional colormaps: [CMasher](https://cmasher.readthedocs.io)
+  (E. van der Velden 2020, JOSS 5, 2004; BSD-3-Clause), used as an optional
+  dependency, not bundled
 - Euclid style and colour schemes adapted from the Euclid Consortium
   Editorial Board's [niceplots](https://gitlab.euclid-sgs.uk/ECEB/niceplots)
   (Lukas Hergt and Laila Linke; GPL-3.0, Euclid-internal) — settings

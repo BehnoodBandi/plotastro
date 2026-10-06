@@ -15,6 +15,16 @@
   giving niceplots' five colour schemes under their niceplots names.
 - `set_style(..., palette=...)` swaps the colour cycle for any named
   palette or list of colours.
+- Optional [CMasher](https://cmasher.readthedocs.io) support, for discrete
+  colours and colormaps: `cmasher_colors(cmap, n=8, cmap_range=(0.15, 0.85))`
+  samples colours from a CMasher map, `cmasher_cmap(cmap, cmap_range=, n=)`
+  returns the map (optionally cut, or split into `n` levels), and
+  `set_style` accepts `palette="cmr.<name>"`. CMasher is **not** a
+  dependency: install it with `pip install "plotastro[cmasher]"` (or
+  `pip install cmasher`). plotastro imports it only when one of these is
+  used, and without it they raise an `ImportError` saying how to install it.
+- `set_style(..., cmap=...)` sets the default colormap: any matplotlib
+  name, or `"cmr.<name>"` for CMasher.
 
 ### Changed
 - `figsize()` / `subplots()`: the default `aspect` now comes from the

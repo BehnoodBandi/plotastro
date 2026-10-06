@@ -64,8 +64,13 @@ fig, axes = pa.subplots(1, 2, width="full", aspect=0.75, sharey=True)
 
 ```python
 pa.set_style("mnras", grid=False)                  # no grid
+pa.set_style("mnras", palette="okabe_ito")         # another colour cycle
+pa.set_style("mnras", cmap="cividis")              # another default colormap
 pa.set_style("mnras", **{"font.size": 10})         # any rcParam
 ```
+
+`palette=` and `cmap=` also take CMasher names such as `"cmr.rainforest"`,
+if you have the optional `cmasher` package installed (see {doc}`colors`).
 
 ## LaTeX text rendering
 

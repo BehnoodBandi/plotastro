@@ -2,4 +2,5 @@
 -r requirements.txt
 numpy
 pytest
+cmasher>=1.7    # optional at runtime; needed for the CMasher tests/figures
 jupyter

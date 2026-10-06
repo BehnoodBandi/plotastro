@@ -88,3 +88,30 @@ save(fig, "redundant_encoding")
 
 # --------------------------------------------------------------- CVD check
 save(pa.check_colors(), "cvd_check")
+
+# ------------------------------------------- CMasher colours (optional extra)
+try:
+    import cmasher  # noqa: F401  (only to check it is installed)
+except ImportError:
+    print("cmasher not installed: skipping figures/cmasher.png")
+else:
+    pa.set_style("mnras", palette="cmr.rainforest", cmap="cmr.ocean")
+    fig, axes = pa.subplots(1, 2, width="full", aspect=0.75)
+    x = np.linspace(0, 1, 200)
+    for n in range(8):                       # the 8-colour CMasher cycle
+        axes[0].plot(x, x ** (0.4 + 0.3 * n), label=f"$n={n + 1}$")
+    axes[0].set_xlabel("$x$")
+    axes[0].set_ylabel("$x^{\\alpha_n}$")
+    axes[0].set_title("palette='cmr.rainforest'", family="monospace", fontsize=8)
+    axes[0].legend(ncol=2, fontsize=6)
+    yy, xx = np.mgrid[-3:3:200j, -3:3:200j]
+    field = (np.exp(-((xx - 0.8) ** 2 + yy ** 2)) + 0.6 * np.exp(
+        -((xx + 1.2) ** 2 + (yy - 1) ** 2) / 0.5))
+    im = axes[1].imshow(field, origin="lower", extent=(-3, 3, -3, 3))
+    axes[1].grid(False)
+    axes[1].set_xlabel("$x$")
+    axes[1].set_ylabel("$y$")
+    axes[1].set_title("cmap='cmr.ocean'", family="monospace", fontsize=8)
+    fig.colorbar(im, ax=axes[1], label="density")
+    pa.label_panels(axes, loc="lower right")[1].set_color("white")
+    save(fig, "cmasher")

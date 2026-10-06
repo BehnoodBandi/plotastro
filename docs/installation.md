@@ -11,12 +11,24 @@ NumPy 1.x and 2.x — CI tests each — and with Python 3.9+. No LaTeX
 installation is required (LaTeX text rendering is optional, see
 {doc}`quickstart`).
 
+### Optional: CMasher colours and colormaps
+
+To use colours and colormaps from [CMasher](https://cmasher.readthedocs.io)
+(see {doc}`colors`), install it as well:
+
+```bash
+pip install "plotastro[cmasher]"     # or simply: pip install cmasher
+```
+
+plotastro imports CMasher only when you ask for a CMasher colour, so it is
+never needed otherwise. (Installing with conda? `conda install -c conda-forge cmasher`.)
+
 ## From a clone
 
 ```bash
 git clone https://github.com/BehnoodBandi/plotastro
 cd plotastro
-pip install -e ".[dev]"          # editable install + test dependencies
+pip install -e ".[dev]"          # editable install + test dependencies (incl. CMasher)
 pytest                           # optional: run the test suite
 ```
 

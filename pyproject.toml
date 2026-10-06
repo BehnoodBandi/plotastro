@@ -33,7 +33,9 @@ Homepage = "https://github.com/BehnoodBandi/plotastro"
 Issues = "https://github.com/BehnoodBandi/plotastro/issues"
 
 [project.optional-dependencies]
-dev = ["pytest", "numpy"]
+# CMasher colours/colormaps are optional: pip install "plotastro[cmasher]"
+cmasher = ["cmasher>=1.7"]
+dev = ["pytest", "numpy", "cmasher>=1.7"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/plotastro"]
