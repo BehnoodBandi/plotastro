@@ -31,6 +31,16 @@ pip install "plotastro[cmasher]"     # or simply: pip install cmasher
 plotastro imports CMasher only when you ask for a CMasher colour, so it is
 never needed otherwise. (Installing with conda? `conda install -c conda-forge cmasher`.)
 
+## From conda-forge
+
+```bash
+conda install -c conda-forge plotastro             # or: mamba install -c conda-forge plotastro
+conda install -c conda-forge plotastro cmasher     # with CMasher
+```
+
+The conda-forge package needs Python 3.11 or newer (conda-forge's current
+minimum); on older Pythons, install with pip instead.
+
 ## From a clone
 
 ```bash
