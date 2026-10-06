@@ -69,7 +69,7 @@ Two problems ruin most paper figures:
 
 The styles share one visual language — Times-like serif fonts at ~9 pt with
 ~8 pt tick lettering, inward ticks on all four sides with minors, a subtle
-grid, frameless legends — and differ only in figure width (plus the
+grid, legends on a translucent white background — and differ only in figure width (plus the
 sans-serif fonts Nature requires), so your plots stay **consistent between
 papers** no matter where you submit. The one exception is `euclid`, which
 deliberately matches the Euclid Consortium's own niceplots look instead

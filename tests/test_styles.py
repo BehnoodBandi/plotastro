@@ -100,7 +100,8 @@ def test_euclid_follows_niceplots():
     pa.set_style("mnras")
     assert plt.rcParams["axes.grid"] is True
     assert plt.rcParams["xtick.minor.visible"] is True
-    assert plt.rcParams["legend.frameon"] is False
+    assert plt.rcParams["legend.frameon"] is True
+    assert plt.rcParams["legend.framealpha"] == pytest.approx(0.7)
     assert plt.rcParams["font.family"] == ["serif"]
     assert plt.rcParams["axes.xmargin"] == pytest.approx(0.03)
 
@@ -142,3 +143,19 @@ def test_switching_styles_is_clean(before, after):
     pa.set_style(before)
     pa.set_style(after)
     assert dict(mpl.rcParams) == fresh
+
+
+@pytest.mark.parametrize("key", [k for k in JOURNAL_STYLES if k != "euclid"])
+def test_legend_has_translucent_white_background(key):
+    import matplotlib.colors as mcolors
+    pa.set_style(key)
+    rc = plt.rcParams
+    assert rc["legend.frameon"] is True
+    assert mcolors.to_rgb(rc["legend.facecolor"]) == (1.0, 1.0, 1.0)
+    assert rc["legend.framealpha"] == pytest.approx(0.7)
+    assert rc["legend.edgecolor"] == "none"
+    # and the drawn legend really gets that background
+    fig, ax = plt.subplots()
+    ax.plot([0, 1], label="line")
+    frame = ax.legend().get_frame()
+    assert frame.get_facecolor() == pytest.approx((1.0, 1.0, 1.0, 0.7))

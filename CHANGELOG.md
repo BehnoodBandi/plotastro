@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+- Legends now sit on a translucent white background (70 % opaque, no
+  border) instead of none, so they stay readable over data and grid
+  lines. The `euclid` style keeps niceplots' framed legends.
+
 ## 1.1.0b1 — 2026-10-06 (beta)
 
 A pre-release: `pip install plotastro` still gives the stable 1.0.1. To try

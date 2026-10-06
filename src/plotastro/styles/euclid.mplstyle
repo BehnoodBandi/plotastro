@@ -98,6 +98,9 @@ ytick.labelsize     : medium
 legend.fontsize       : medium
 legend.title_fontsize : None
 legend.frameon        : True
+legend.facecolor      : inherit  # matplotlib default
+legend.framealpha     : 0.8      # matplotlib default
+legend.edgecolor      : 0.8      # matplotlib default
 legend.handlelength   : 2.0
 legend.handletextpad  : 0.8
 legend.labelspacing   : 0.5

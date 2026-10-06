@@ -175,7 +175,10 @@ ytick.labelsize     : small
 ## ---- Legend ---------------------------------------------------------
 legend.fontsize       : small
 legend.title_fontsize : small
-legend.frameon        : False
+legend.frameon        : True
+legend.facecolor      : white
+legend.framealpha     : 0.7      # translucent background: readable over data and grid
+legend.edgecolor      : none     # ...without a border
 legend.handlelength   : 1.8
 legend.handletextpad  : 0.5
 legend.labelspacing   : 0.3
@@ -310,6 +313,9 @@ ytick.labelsize     : medium
 legend.fontsize       : medium
 legend.title_fontsize : None
 legend.frameon        : True
+legend.facecolor      : inherit  # matplotlib default
+legend.framealpha     : 0.8      # matplotlib default
+legend.edgecolor      : 0.8      # matplotlib default
 legend.handlelength   : 2.0
 legend.handletextpad  : 0.8
 legend.labelspacing   : 0.5

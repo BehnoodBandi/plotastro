@@ -78,7 +78,10 @@ ytick.labelsize     : small
 ## ---- Legend ---------------------------------------------------------
 legend.fontsize       : small
 legend.title_fontsize : small
-legend.frameon        : False
+legend.frameon        : True
+legend.facecolor      : white
+legend.framealpha     : 0.7      # translucent background: readable over data and grid
+legend.edgecolor      : none     # ...without a border
 legend.handlelength   : 1.8
 legend.handletextpad  : 0.5
 legend.labelspacing   : 0.3
