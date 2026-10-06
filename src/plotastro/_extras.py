@@ -42,6 +42,12 @@ def style_cycler(n=None, *, colors=True, markers=False, linestyles=False):
     colors, markers, linestyles : bool
         Which properties to cycle together.
 
+    Returns
+    -------
+    cycler.Cycler : for ``ax.set_prop_cycle`` or
+    ``plt.rc("axes", prop_cycle=...)``. The colours are always the
+    default cycle, :data:`COLORS`.
+
     Examples
     --------
     >>> ax.set_prop_cycle(pa.style_cycler(markers=True))
@@ -131,7 +137,25 @@ def label_panels(axes, fmt="({})", loc="upper left", uppercase=False,
 # ----------------------------------------------------------------------
 
 def show_colors(palette=None, title="Default colour-blind-friendly cycle"):
-    """Swatch chart of a palette dict (default: the style's colour cycle)."""
+    """Swatch chart of a palette: each colour with its cycle index
+    (``C0``, ``C1``, ...), name and hex code.
+
+    Parameters
+    ----------
+    palette : dict, optional
+        ``{name: colour}``, e.g. :data:`OKABE_ITO`. Default: the colour
+        cycle, :data:`COLORS`.
+    title : str, optional
+        Figure title.
+
+    Returns
+    -------
+    Figure
+
+    Examples
+    --------
+    >>> pa.show_colors(pa.PETROFF10, title="Petroff (2021)")
+    """
     palette = palette if palette is not None else COLORS
     names = list(palette)
     fig, ax = plt.subplots(
@@ -151,7 +175,13 @@ def show_colors(palette=None, title="Default colour-blind-friendly cycle"):
 
 
 def show_markers():
-    """Reference chart of the marker sequence (and a few more)."""
+    """Reference chart of :data:`MARKERS` (first row) and eight more
+    matplotlib markers, each with the code that draws it.
+
+    Returns
+    -------
+    Figure
+    """
     extra = ["<", ">", "h", "8", "P", "d", "x", "+"]
     all_markers = MARKERS + extra
     fig, ax = plt.subplots(
@@ -171,7 +201,12 @@ def show_markers():
 
 
 def show_linestyles():
-    """Reference chart of the named dash patterns in LINESTYLES."""
+    """Reference chart of the named dash patterns in :data:`LINESTYLES`.
+
+    Returns
+    -------
+    Figure
+    """
     fig, ax = plt.subplots(
         figsize=figsize("full", journal="mnras", fraction=0.9,
                         height=0.34 * len(LINESTYLES) + 0.5))

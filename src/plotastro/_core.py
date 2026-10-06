@@ -84,7 +84,14 @@ def _resolve(journal):
 
 
 def current_journal():
-    """Name of the journal activated by the last :func:`set_style` call."""
+    """Name of the journal activated by the last :func:`set_style` call.
+
+    Returns
+    -------
+    str : a key of :data:`JOURNALS`, e.g. ``"mnras"`` (also the value
+    before any :func:`set_style` call). Aliases are resolved, so after
+    ``set_style("a&a")`` this is ``"aanda"``.
+    """
     return _state["journal"]
 
 
@@ -233,6 +240,23 @@ def subplots(nrows=1, ncols=1, *, width="column", journal=None, fraction=1.0,
              aspect=None, height=None, **kwargs):
     """`plt.subplots` with the figure size computed by :func:`figsize`.
 
+    Parameters
+    ----------
+    nrows, ncols : int, optional
+        Subplot grid shape.
+    width, journal, fraction, aspect, height
+        Passed to :func:`figsize`, together with ``nrows`` and ``ncols``,
+        so each panel keeps the requested aspect ratio.
+    **kwargs
+        Forwarded to ``plt.subplots`` (e.g. ``sharex=True``). Passing
+        ``figsize=`` yourself overrides the computed size.
+
+    Returns
+    -------
+    fig : Figure
+    ax : Axes or array of Axes
+        As returned by ``plt.subplots``.
+
     Examples
     --------
     >>> fig, ax = pa.subplots()                          # one-column figure
@@ -287,6 +311,23 @@ def set_size(width="mnras", fraction=1, subplots=(1, 1), hight_ratio=1):
 
     ``set_size('mnras')`` == ``figsize('column', journal='mnras')`` and
     ``set_size('mnras_full')`` == ``figsize('full', journal='mnras')``.
+
+    Parameters
+    ----------
+    width : str or float
+        A journal key (one-column width), ``"mnras_full"`` for the full
+        MNRAS text width, or a width in LaTeX points.
+    fraction : float
+        Fraction of that width to occupy.
+    subplots : (int, int)
+        Subplot grid shape, (rows, columns).
+    hight_ratio : float
+        Multiplies the golden-ratio height (spelled as in the original
+        API).
+
+    Returns
+    -------
+    (width_in, height_in) : tuple of float
     """
     if width == "mnras_full":
         return figsize("full", journal="mnras", fraction=fraction,

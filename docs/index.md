@@ -72,7 +72,7 @@ deliberately matches the Euclid Consortium's own niceplots look instead
 - {doc}`quickstart` — the five-minute version
 - {doc}`tutorial` — the full hands-on notebook, rendered
 - {doc}`journals` — supported journals and their figure widths
-- {doc}`colors` — the palettes and colour-blindness checking
+- {doc}`colors` — the palettes, colour-blindness checking and CMasher colormaps
 - {doc}`markers` — markers, line styles, cyclers and panel labels
 - {doc}`authors` — LaTeX author lists from your collaboration's CSV
 - {doc}`tables` — LaTeX tables from DataFrames, astropy Tables and arrays

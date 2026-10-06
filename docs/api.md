@@ -1,71 +1,61 @@
 # API reference
 
-Everything is available at the top level:
+Everything is available at the top level of the package:
 
 ```python
 import plotastro as pa
 ```
 
-## Styles and sizing
+The reference is split by topic into the pages below, grouped in three
+sets. Each table lists everything a page documents. The guides
+({doc}`quickstart`, {doc}`colors`, {doc}`markers`, {doc}`authors`) show the
+same features in use.
 
-```{eval-rst}
-.. autofunction:: plotastro.set_style
-.. autofunction:: plotastro.figsize
-.. autofunction:: plotastro.subplots
-.. autofunction:: plotastro.savefig
-.. autofunction:: plotastro.current_journal
-```
+## Figures
 
-`pa.use(...)` is an alias of {func}`plotastro.set_style`.
+**{doc}`api/styles`**
+
+| name | what it does |
+|---|---|
+| {func}`~plotastro.set_style`, {func}`~plotastro.use` | activate a journal's style, optionally with a palette, colormap, LaTeX or rcParams |
+| {func}`~plotastro.current_journal` | the journal of the last `set_style` call |
+| {func}`~plotastro.figsize` | figure dimensions matching a journal's column or text width |
+| {func}`~plotastro.subplots` | `plt.subplots` with that size computed for you |
+| {func}`~plotastro.savefig` | save a figure in several formats at once |
+| {data}`~plotastro.JOURNALS`, {data}`~plotastro.GOLDEN`, {data}`~plotastro.STYLE_DIR` | journal widths, the default aspect ratio, the `.mplstyle` files |
+| {func}`~plotastro.set_size` | deprecated form of `figsize`, from the original API |
+
+**{doc}`api/markers`**
+
+| name | what it does |
+|---|---|
+| {data}`~plotastro.MARKERS`, {data}`~plotastro.LINESTYLES` | marker sequence and named dash patterns |
+| {func}`~plotastro.style_cycler` | a property cycle pairing colours with markers and/or dashes |
+| {func}`~plotastro.label_panels` | (a), (b), (c) panel labels |
+| {func}`~plotastro.show_markers`, {func}`~plotastro.show_linestyles` | reference charts of the markers and dash patterns |
 
 ## Colours
 
-```{eval-rst}
-.. autofunction:: plotastro.lighten
-.. autofunction:: plotastro.darken
-.. autofunction:: plotastro.simulate_cvd
-.. autofunction:: plotastro.check_colors
-.. autofunction:: plotastro.check_figure
-.. autofunction:: plotastro.euclid_colors
-```
+**{doc}`api/colors`**
 
-### CMasher (optional)
-
-These need the optional `cmasher` package (`pip install cmasher`); see
-{doc}`colors`. `set_style(palette="cmr.<name>", cmap="cmr.<name>")` uses
-them too.
-
-```{eval-rst}
-.. autofunction:: plotastro.cmasher_colors
-.. autofunction:: plotastro.cmasher_cmap
-```
-
-### Palette constants
-
-| name | contents |
+| name | what it does |
 |---|---|
-| `pa.COLORS` | the default 12-colour colour-blind-friendly cycle, by name |
-| `pa.CYCLE` | the same colours as an ordered list |
-| `pa.OKABE_ITO` | Okabe & Ito (2008) 8-colour CVD-safe palette |
-| `pa.PETROFF10` | Petroff (2021) 10-colour CVD-optimised palette |
-| `pa.PETROFF8` | Petroff (2021) 8-colour palette — the Euclid niceplots default |
-| `pa.TOL_VIBRANT` | Paul Tol's *vibrant* 7-colour CVD-safe scheme |
-| `pa.PAIRED` | light/dark pairs: `pa.PAIRED["blue"] -> (light, dark)` |
+| {data}`~plotastro.COLORS`, {data}`~plotastro.CYCLE` | the default colour-blind-friendly cycle, by name and in order |
+| {data}`~plotastro.OKABE_ITO`, {data}`~plotastro.PETROFF8`, {data}`~plotastro.PETROFF10`, {data}`~plotastro.TOL_VIBRANT`, {data}`~plotastro.PAIRED` | more palettes |
+| {func}`~plotastro.euclid_colors` | the Euclid niceplots colour schemes, by name |
+| {func}`~plotastro.lighten`, {func}`~plotastro.darken` | matched shades without transparency |
+| {func}`~plotastro.show_colors` | swatch chart of a palette |
 
-## Markers, line styles and labels
+**{doc}`api/cmasher`** (optional `cmasher` package)
 
-```{eval-rst}
-.. autofunction:: plotastro.style_cycler
-.. autofunction:: plotastro.label_panels
-```
-
-| name | contents |
+| name | what it does |
 |---|---|
-| `pa.MARKERS` | marker sequence that stays distinguishable at 4 pt |
-| `pa.LINESTYLES` | named dash patterns beyond matplotlib's built-ins |
+| {func}`~plotastro.cmasher_colors` | `n` discrete colours sampled from a CMasher colormap |
+| {func}`~plotastro.cmasher_cmap` | a CMasher colormap, optionally cut or split into levels |
 
-## Reference charts
+**{doc}`api/accessibility`**
 
+<<<<<<< HEAD
 ```{eval-rst}
 .. autofunction:: plotastro.show_colors
 .. autofunction:: plotastro.show_markers
@@ -96,7 +86,50 @@ See {doc}`tables` for a worked example.
 ```
 
 | name | contents |
+=======
+| name | what it does |
+>>>>>>> dev
 |---|---|
-| `pa.JOURNALS` | per-journal column/full widths (LaTeX points) and metadata |
-| `pa.GOLDEN` | the golden ratio (default figure aspect), ≈ 0.618 |
-| `pa.STYLE_DIR` | path to the bundled `.mplstyle` files |
+| {func}`~plotastro.simulate_cvd` | how colours look with a colour-vision deficiency, or in greyscale |
+| {func}`~plotastro.check_colors` | a palette next to its simulations |
+| {func}`~plotastro.check_figure` | a whole rendered figure next to its simulations |
+
+## LaTeX output
+
+**{doc}`api/authors`**
+
+| name | what it does |
+|---|---|
+| {func}`~plotastro.authorlist` | LaTeX author/affiliation block for a journal, from a CSV file |
+| `plotastro-authors` | the same from the command line |
+
+## Package
+
+`pa.__version__` is the installed version, as a string. Importing
+plotastro also registers its styles with matplotlib, so
+`plt.style.use("mnras")` works anywhere afterwards (see
+{ref}`api-plain-matplotlib`).
+
+```{toctree}
+:hidden:
+:caption: Figures
+
+api/styles
+api/markers
+```
+
+```{toctree}
+:hidden:
+:caption: Colours
+
+api/colors
+api/cmasher
+api/accessibility
+```
+
+```{toctree}
+:hidden:
+:caption: LaTeX output
+
+api/authors
+```
