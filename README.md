@@ -13,7 +13,7 @@ One `pip install` gives you journal-matched styles for **MNRAS**, **RASTI**,
 **JCAP**, **Nature Astronomy** and **Euclid Consortium** papers — figures
 at exactly the right physical size, a colour-blind-friendly palette, and
 helpers that make the tedious parts (sizing, panel labels, accessibility
-checks, saving) one-liners.
+checks, author lists, tables, saving) one-liners.
 
 ```bash
 pip install plotastro
@@ -418,12 +418,58 @@ plotastro-authors authors.csv -j apj -o authors.tex
 See [examples/authors_example.csv](examples/authors_example.csv) for a
 complete example.
 
+### LaTeX tables
+
+`pa.latex_table` turns a pandas DataFrame, an astropy Table, a NumPy array
+or a dict of columns into a LaTeX table. You set the precision and notation
+of each column, and error columns are merged into the column they belong
+to, so they don't get columns of their own:
+
+```python
+print(pa.latex_table(
+    df,
+    errors={"z": ("z_lo", "z_hi"),    # asymmetric: value^{+hi}_{-lo}
+            "logM": "logM_err"},       # symmetric:  value \pm err
+    sig={"flux": 2},                   # significant figures, per column
+    notation={"flux": "sci"},          # "fixed", "sci" or "auto"
+    headers={"z": "$z$", "logM": r"$\log(M_\star/\mathrm{M_\odot})$"},
+    caption="The galaxy sample.", label="tab:sample"))
+```
+
+```latex
+\begin{table}
+    \centering
+    \caption{The galaxy sample.}
+    \label{tab:sample}
+    \begin{tabular}{lccc}
+        \hline
+        name     & $z$                                & $\log(M_\star/\mathrm{M_\odot})$ & flux \\
+        \hline
+        NGC 1300 & $0.005260^{+0.000040}_{-0.000030}$ & $10.52 \pm 0.12$                 & $1.2\times10^{-15}$ \\
+        NGC 4321 & $0.005240 \pm 0.000020$            & $10.870 \pm 0.050$               & $3.4\times10^{-16}$ \\
+        M31      & $-0.001000 \pm 0.000010$           & $11.040 \pm 0.081$               & $5.6\times10^{-14}$ \\
+        \hline
+    \end{tabular}
+\end{table}
+```
+
+For a column with errors, `sig` is the number of significant figures of
+the error (default 2), and the value is rounded to the same decimal place.
+Plain columns default to 3 significant figures. `decimals=` sets a fixed
+number of decimal places instead. Integer columns such as IDs are printed
+exactly. Other options: `units=` adds a units row (filled in automatically
+for astropy columns), `align=`, `env="table*"` for a two-column-wide table
+(or `env=None` for only the `tabular`), `booktabs=True` and `missing="--"`.
+The layout follows the MNRAS template and compiles with every supported
+journal class.
+
 ## API summary
 
 | | |
 |---|---|
 | `set_style(journal, usetex=, grid=, palette=, cmap=, **rc)` | activate a journal's style (alias: `use`) |
 | `authorlist(csv, journal=)` | LaTeX author/affiliation block from a CSV (CLI: `plotastro-authors`) |
+| `latex_table(data, errors=, sig=, decimals=, notation=, ...)` | LaTeX table from a DataFrame, astropy Table or array |
 | `figsize(width, journal=, fraction=, aspect=, ...)` | journal-correct figure dimensions |
 | `subplots(...)` | `plt.subplots` with the size computed for you |
 | `savefig(name, formats=("pdf",))` | save one figure in several formats |

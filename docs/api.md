@@ -81,6 +81,14 @@ them too.
 The `plotastro-authors` command-line tool wraps this function; run
 `plotastro-authors --help` for its options.
 
+## Tables
+
+```{eval-rst}
+.. autofunction:: plotastro.latex_table
+```
+
+See {doc}`tables` for a worked example.
+
 ## Journal data and legacy
 
 ```{eval-rst}

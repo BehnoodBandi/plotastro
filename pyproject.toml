@@ -35,7 +35,8 @@ Issues = "https://github.com/BehnoodBandi/plotastro/issues"
 [project.optional-dependencies]
 # CMasher colours/colormaps are optional: pip install "plotastro[cmasher]"
 cmasher = ["cmasher>=1.7"]
-dev = ["pytest", "numpy", "cmasher>=1.7"]
+# pandas/astropy only exercise latex_table's input readers in the tests
+dev = ["pytest", "numpy", "cmasher>=1.7", "pandas", "astropy"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/plotastro"]

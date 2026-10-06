@@ -1,5 +1,19 @@
 # Changelog
 
+## Unreleased
+
+### Added
+- `latex_table(data, ...)` returns a LaTeX table for a pandas DataFrame,
+  an astropy Table/QTable, a NumPy structured or 2D array, or a dict of
+  columns. Each column has its own precision (`sig=` significant figures
+  or `decimals=`) and `notation=` (`"fixed"`, `"sci"`, or `"auto"`, which
+  is chosen per column). `errors=` merges error columns into their value
+  column as `value \pm err`, or as `value^{+hi}_{-lo}` for asymmetric
+  errors. The error's significant figures set the value's precision.
+  Also: headers, a units row (filled in automatically from astropy
+  units), `table`/`table*`/bare `tabular`, optional booktabs rules, and
+  missing or masked values. pandas and astropy are not dependencies.
+
 ## 1.1.0b2 — 2026-10-06 (beta)
 
 A pre-release: `pip install plotastro` still gives the stable 1.0.1. To try

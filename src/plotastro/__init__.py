@@ -20,7 +20,9 @@ Supported journals: MNRAS, RASTI, A&A, ApJ/ApJL (AASTeX), the Open Journal
 of Astrophysics, PRD/PRL (REVTeX), JCAP, Nature Astronomy and Euclid
 Consortium papers (the ECEB's niceplots look) — plus "thesis" and "beamer"
 width presets. Colours and colormaps from CMasher are an optional extra
-(``pip install cmasher``). See the README for the full tutorial.
+(``pip install cmasher``). ``pa.authorlist`` and ``pa.latex_table`` write
+the LaTeX for author lists and tables. See the README for the full
+tutorial.
 """
 
 from importlib.metadata import PackageNotFoundError, version as _version
@@ -29,6 +31,7 @@ import matplotlib as _mpl
 import matplotlib.style as _mstyle
 
 from ._authors import authorlist
+from ._tables import latex_table
 from ._core import (
     GOLDEN, JOURNALS, STYLE_DIR,
     current_journal, figsize, savefig, set_size, set_style, subplots, use,
@@ -50,7 +53,7 @@ except PackageNotFoundError:  # running from a source checkout
 
 __all__ = [
     "set_style", "use", "figsize", "subplots", "savefig", "current_journal",
-    "authorlist",
+    "authorlist", "latex_table",
     "JOURNALS", "GOLDEN", "STYLE_DIR",
     "COLORS", "CYCLE", "OKABE_ITO", "PETROFF8", "PETROFF10", "TOL_VIBRANT",
     "PAIRED", "euclid_colors", "cmasher_colors", "cmasher_cmap",

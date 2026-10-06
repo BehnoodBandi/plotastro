@@ -3,4 +3,6 @@
 numpy
 pytest
 cmasher>=1.7    # optional at runtime; needed for the CMasher tests/figures
+pandas          # latex_table input tests
+astropy         # latex_table input tests
 jupyter

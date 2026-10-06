@@ -7,7 +7,7 @@ One `pip install` gives you journal-matched styles for **MNRAS**, **RASTI**,
 **JCAP**, **Nature Astronomy** and **Euclid Consortium** papers — figures
 at exactly the right physical size, a colour-blind-friendly palette, and
 helpers that make the tedious parts (sizing, panel labels, accessibility
-checks, author lists, saving) one-liners.
+checks, author lists, tables, saving) one-liners.
 
 ```bash
 pip install plotastro
@@ -75,6 +75,7 @@ deliberately matches the Euclid Consortium's own niceplots look instead
 - {doc}`colors` — the palettes and colour-blindness checking
 - {doc}`markers` — markers, line styles, cyclers and panel labels
 - {doc}`authors` — LaTeX author lists from your collaboration's CSV
+- {doc}`tables` — LaTeX tables from DataFrames, astropy Tables and arrays
 - {doc}`api` — every public function
 
 ```{toctree}
@@ -87,6 +88,7 @@ journals
 colors
 markers
 authors
+tables
 api
 faq
 changelog
