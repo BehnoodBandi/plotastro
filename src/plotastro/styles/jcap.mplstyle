@@ -24,6 +24,7 @@ patch.linewidth       : 0.8
 ## ---- Fonts ----------------------------------------------------------
 font.family      : serif
 font.serif       : Times New Roman, Times, Nimbus Roman, STIXGeneral, DejaVu Serif
+font.sans-serif  : DejaVu Sans, Bitstream Vera Sans, Computer Modern Sans Serif, Lucida Grande, Verdana, Geneva, Lucid, Arial, Helvetica, Avant Garde, sans-serif
 font.size        : 9
 mathtext.fontset : stix          # Times-compatible maths without LaTeX
 
@@ -34,6 +35,7 @@ mathtext.fontset : stix          # Times-compatible maths without LaTeX
 
 ## ---- Axes -----------------------------------------------------------
 axes.linewidth             : 0.6
+axes.facecolor             : white   # matplotlib default
 axes.labelsize             : medium
 axes.titlesize             : medium
 axes.labelpad              : 3
@@ -59,6 +61,7 @@ xtick.major.size    : 3.5
 xtick.minor.size    : 2
 xtick.major.width   : 0.6
 xtick.minor.width   : 0.4
+xtick.major.pad     : 3.5        # matplotlib default
 xtick.labelsize     : small      # ~1 pt below the base font size
 
 ytick.direction     : in
@@ -69,6 +72,7 @@ ytick.major.size    : 3.5
 ytick.minor.size    : 2
 ytick.major.width   : 0.6
 ytick.minor.width   : 0.4
+ytick.major.pad     : 3.5
 ytick.labelsize     : small
 
 ## ---- Legend ---------------------------------------------------------

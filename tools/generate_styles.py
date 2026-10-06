@@ -4,7 +4,9 @@ All journal styles share a single visual language (TEMPLATE); only the
 header, default figure size and (for Nature Astronomy) the font block
 differ. The one exception is "euclid", which reproduces the look of the
 Euclid Consortium's niceplots and therefore has its own EUCLID_TEMPLATE.
-Edit the templates or the JOURNALS dict below, then run:
+Every style sets the same rcParams (writing out matplotlib's defaults where
+needed), so switching between styles in one session is clean; the tests
+check this. Edit the templates or the JOURNALS dict below, then run:
 
     python tools/generate_styles.py
 """
@@ -15,6 +17,7 @@ OUTDIR = Path(__file__).resolve().parents[1] / "src" / "plotastro" / "styles"
 
 SERIF_FONTS = """font.family      : serif
 font.serif       : Times New Roman, Times, Nimbus Roman, STIXGeneral, DejaVu Serif
+font.sans-serif  : DejaVu Sans, Bitstream Vera Sans, Computer Modern Sans Serif, Lucida Grande, Verdana, Geneva, Lucid, Arial, Helvetica, Avant Garde, sans-serif
 font.size        : 9
 mathtext.fontset : stix          # Times-compatible maths without LaTeX
 
@@ -25,6 +28,7 @@ mathtext.fontset : stix          # Times-compatible maths without LaTeX
 
 SANS_FONTS = """font.family      : sans-serif
 font.sans-serif  : Arial, Helvetica, Nimbus Sans, DejaVu Sans
+font.serif       : DejaVu Serif, Bitstream Vera Serif, Computer Modern Roman, New Century Schoolbook, Century Schoolbook L, Utopia, ITC Bookman, Bookman, Nimbus Roman No9 L, Times New Roman, Times, Palatino, Charter, serif
 font.size        : 7             # Nature asks for 5-7 pt final lettering
 mathtext.fontset : dejavusans    # sans-serif maths without LaTeX
 
@@ -128,6 +132,7 @@ patch.linewidth       : 0.8
 
 ## ---- Axes -----------------------------------------------------------
 axes.linewidth             : 0.6
+axes.facecolor             : white   # matplotlib default
 axes.labelsize             : medium
 axes.titlesize             : medium
 axes.labelpad              : 3
@@ -153,6 +158,7 @@ xtick.major.size    : 3.5
 xtick.minor.size    : 2
 xtick.major.width   : 0.6
 xtick.minor.width   : 0.4
+xtick.major.pad     : 3.5        # matplotlib default
 xtick.labelsize     : small      # ~1 pt below the base font size
 
 ytick.direction     : in
@@ -163,6 +169,7 @@ ytick.major.size    : 3.5
 ytick.minor.size    : 2
 ytick.major.width   : 0.6
 ytick.minor.width   : 0.4
+ytick.major.pad     : 3.5
 ytick.labelsize     : small
 
 ## ---- Legend ---------------------------------------------------------
@@ -248,6 +255,7 @@ patch.linewidth       : 1.0      # matplotlib default
 ## ---- Fonts: sans-serif text, Computer Modern maths ------------------
 font.family      : sans-serif
 font.sans-serif  : DejaVu Sans, Bitstream Vera Sans, Computer Modern Sans Serif, Lucida Grande, Verdana, Geneva, Lucid, Arial, Helvetica, Avant Garde, sans-serif
+font.serif       : DejaVu Serif, Bitstream Vera Serif, Computer Modern Roman, New Century Schoolbook, Century Schoolbook L, Utopia, ITC Bookman, Bookman, Nimbus Roman No9 L, Times New Roman, Times, Palatino, Charter, serif   # matplotlib default
 font.size        : 10
 mathtext.fontset : cm            # Computer Modern, like LaTeX's default maths
 

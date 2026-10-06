@@ -122,3 +122,23 @@ def test_palette_option():
         pa.set_style("mnras", palette="rainbow")
     with pytest.raises(ValueError, match="at least one colour"):
         pa.set_style("mnras", palette=[])
+
+
+def test_all_styles_set_the_same_params():
+    """Matplotlib only overwrites the rcParams a style names, so every style
+    must name the same ones, or switching styles leaks settings."""
+    keys = {key: set(plt.style.library[key]) for key in JOURNAL_STYLES}
+    reference = keys["mnras"]
+    for key, names in keys.items():
+        assert names == reference, (key, names ^ reference)
+
+
+@pytest.mark.parametrize("before", JOURNAL_STYLES)
+@pytest.mark.parametrize("after", ["mnras", "natastro", "euclid"])
+def test_switching_styles_is_clean(before, after):
+    import matplotlib as mpl
+    pa.set_style(after)
+    fresh = dict(mpl.rcParams)
+    pa.set_style(before)
+    pa.set_style(after)
+    assert dict(mpl.rcParams) == fresh

@@ -32,6 +32,14 @@
 - `authorlist(..., journal="euclid")` uses the A&A format (Euclid's
   `aaEC` class).
 
+### Fixed
+- Switching styles in one session no longer carries settings over.
+  matplotlib only overwrites the rcParams a style names, and the styles
+  named different ones: after `euclid`, for example, `set_style("mnras")`
+  or `plt.style.use("mnras")` kept Euclid's tick padding. Every style now
+  sets the same rcParams, using matplotlib's defaults where they apply,
+  and a test checks this.
+
 ## 1.0.1 — 2026-09-01
 
 ### Added

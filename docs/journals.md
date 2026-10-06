@@ -13,7 +13,7 @@
 | `prd` (`prl`, `revtex`) | Physical Review D | 246.0 pt = 3.40 in | 510.0 pt = 7.06 in |
 | `jcap` | J. Cosmology & Astroparticle Phys. | single-column ≈455 pt = 6.30 in | — |
 | `natastro` (`nature`) | Nature Astronomy (sans-serif!) | 253.2 pt = 3.50 in (89 mm) | 520.7 pt = 7.20 in (183 mm) |
-| `euclid` (`ec`) | Euclid Consortium papers (A&A; niceplots look, sans-serif) | drawn 4.00 in = 289.1 pt, LaTeX scales it to 88 mm | 8.00 in = 578.2 pt (2 × column) |
+| `euclid` (`ec`) | Euclid Consortium papers (A&A; niceplots look, sans-serif) - not recomended!| drawn 4.00 in = 289.1 pt, LaTeX scales it to 88 mm | 8.00 in = 578.2 pt (2 × column) |
 | `thesis` | A4 thesis text width | 426.8 pt = 5.91 in | — |
 | `beamer` | Beamer slide text width | 307.3 pt = 4.25 in | — |
 
