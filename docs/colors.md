@@ -40,8 +40,38 @@ pa.darken(pa.COLORS["orange"], 0.3)     # the other direction
   *the* classic CVD-safe recommendation for categorical colours in science;
 - `pa.PETROFF10` — [Petroff (2021)](https://arxiv.org/abs/2107.02270), the
   CVD-optimised 10-colour cycle used across particle physics;
+- `pa.PETROFF8` — Petroff's 8-colour sibling, the default cycle of the
+  Euclid Consortium's [niceplots](https://gitlab.euclid-sgs.uk/ECEB/niceplots)
+  (and of the `euclid` style here);
+- `pa.TOL_VIBRANT` — [Paul Tol's](https://personal.sron.nl/~pault/) *vibrant*
+  qualitative scheme, 7 CVD-safe colours;
 - `pa.PAIRED` — light/dark pairs for data/model or before/after
   comparisons: `pa.PAIRED["blue"]` → `("#a6cee3", "#1f78b4")`.
+
+Any of them can become the active cycle when you activate a style —
+`pa.set_style("mnras", palette="okabe_ito")` — or pass your own list of
+colours.
+
+## Euclid colour schemes
+
+The `euclid` style (see {doc}`journals`) and these colour schemes are
+adapted from the Euclid Consortium Editorial Board's
+[niceplots](https://gitlab.euclid-sgs.uk/ECEB/niceplots) (Euclid-internal,
+GPL-3.0): the colours are re-expressed here, nothing is copied from it.
+{func}`plotastro.euclid_colors` returns each scheme under its niceplots name:
+
+| scheme | colours |
+|---|---|
+| `"categorical1"` | Petroff (2021) 8 colours — `pa.PETROFF8`; the Euclid default |
+| `"categorical2"` | Okabe & Ito — `pa.OKABE_ITO` |
+| `"categorical3"` | black, then Tol's *vibrant* scheme — `pa.TOL_VIBRANT` |
+| `"sequential"` | `n` colours of increasing brightness from `copper` |
+| `"diverging"` | `n` colours from blue to red from `coolwarm` |
+
+```python
+pa.set_style("euclid", palette="categorical3")                 # by name
+ax.set_prop_cycle(color=pa.euclid_colors("sequential", n=6))   # per axes
+```
 
 ## Checking accessibility yourself
 

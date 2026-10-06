@@ -9,3 +9,7 @@ build/
 docs/_build/
 docs/_figures/
 docs/tutorial.ipynb
+.vscode/
+.gitignore
+.DS_Store
+.gitignore

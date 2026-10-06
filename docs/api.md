@@ -26,6 +26,7 @@ import plotastro as pa
 .. autofunction:: plotastro.simulate_cvd
 .. autofunction:: plotastro.check_colors
 .. autofunction:: plotastro.check_figure
+.. autofunction:: plotastro.euclid_colors
 ```
 
 ### Palette constants
@@ -36,6 +37,8 @@ import plotastro as pa
 | `pa.CYCLE` | the same colours as an ordered list |
 | `pa.OKABE_ITO` | Okabe & Ito (2008) 8-colour CVD-safe palette |
 | `pa.PETROFF10` | Petroff (2021) 10-colour CVD-optimised palette |
+| `pa.PETROFF8` | Petroff (2021) 8-colour palette — the Euclid niceplots default |
+| `pa.TOL_VIBRANT` | Paul Tol's *vibrant* 7-colour CVD-safe scheme |
 | `pa.PAIRED` | light/dark pairs: `pa.PAIRED["blue"] -> (light, dark)` |
 
 ## Markers, line styles and labels

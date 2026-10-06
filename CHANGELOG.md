@@ -1,5 +1,27 @@
 # Changelog
 
+## Unreleased
+
+### Added
+- `euclid` style (alias `ec`) for Euclid Consortium papers, adapted from
+  the Euclid Consortium Editorial Board's
+  [niceplots](https://gitlab.euclid-sgs.uk/ECEB/niceplots) (GPL-3.0,
+  Euclid-internal): sans-serif 10 pt text with Computer Modern maths, no
+  grid or minor ticks, framed legends, Petroff-8 colours, and niceplots'
+  4 × 3 in figure convention (LaTeX scales the figure into the A&A
+  column). The settings are re-expressed in plotastro's own template;
+  nothing is copied from niceplots.
+- Palettes `PETROFF8` and `TOL_VIBRANT`, and `euclid_colors(scheme, n=)`
+  giving niceplots' five colour schemes under their niceplots names.
+- `set_style(..., palette=...)` swaps the colour cycle for any named
+  palette or list of colours.
+
+### Changed
+- `figsize()` / `subplots()`: the default `aspect` now comes from the
+  journal (golden ratio everywhere except `euclid`, which uses 4:3).
+- `authorlist(..., journal="euclid")` uses the A&A format (Euclid's
+  `aaEC` class).
+
 ## 1.0.1 — 2026-09-01
 
 ### Added

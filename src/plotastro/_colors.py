@@ -63,6 +63,33 @@ PETROFF10 = {
     "cyan":   "#92dadd",
 }
 
+#: Petroff (2021) 8-colour palette — the sibling of :data:`PETROFF10`
+#: (matplotlib's "petroff8") and the default cycle of the Euclid
+#: Consortium's niceplots style (its "categorical1" scheme).
+PETROFF8 = {
+    "blue":       "#1845fb",
+    "orange":     "#ff5e02",
+    "red":        "#c91f16",
+    "magenta":    "#c849a9",
+    "khaki":      "#adad7d",
+    "lightblue":  "#86c8dd",
+    "cornflower": "#578dff",
+    "grey":       "#656364",
+}
+
+#: Paul Tol's "vibrant" qualitative scheme — 7 CVD-safe colours. The
+#: Euclid niceplots "categorical3" scheme is this palette with black in
+#: front (see :func:`euclid_colors`).
+TOL_VIBRANT = {
+    "orange":  "#ee7733",
+    "blue":    "#0077bb",
+    "cyan":    "#33bbee",
+    "magenta": "#ee3377",
+    "red":     "#cc3311",
+    "teal":    "#009988",
+    "grey":    "#bbbbbb",
+}
+
 #: Light/dark pairs (ColorBrewer "Paired") — ideal for data/model or
 #: before/after pairs: PAIRED["blue"] -> (light, dark). Note this palette
 #: is *not* fully CVD-safe on its own (it contains red and green); pair
@@ -75,6 +102,88 @@ PAIRED = {
     "purple": ("#cab2d6", "#6a3d9a"),
     "brown":  ("#ffff99", "#b15928"),
 }
+
+# Palette names accepted by set_style(palette=...), normalised (lower
+# case, no separators). The Euclid niceplots scheme names are resolved
+# by euclid_colors().
+_NAMED_PALETTES = {
+    "default": CYCLE, "plotastro": CYCLE,
+    "okabeito": list(OKABE_ITO.values()),
+    "petroff8": list(PETROFF8.values()),
+    "petroff10": list(PETROFF10.values()),
+    "tolvibrant": list(TOL_VIBRANT.values()),
+}
+
+
+def _normalise(name):
+    return str(name).lower().replace("-", "").replace("_", "").replace(" ", "")
+
+
+def euclid_colors(scheme="categorical1", n=8):
+    """The colour schemes of the Euclid Consortium's niceplots, by the
+    names its ``initPlot(colortype=...)`` uses.
+
+    Parameters
+    ----------
+    scheme : str
+        ``"categorical1"`` — Petroff (2021) 8 colours, the Euclid default
+        (:data:`PETROFF8`); ``"categorical2"`` — Okabe & Ito
+        (:data:`OKABE_ITO`); ``"categorical3"`` — black followed by Tol's
+        *vibrant* scheme (:data:`TOL_VIBRANT`); ``"sequential"`` — ``n``
+        colours of increasing brightness from the ``copper`` colormap;
+        ``"diverging"`` — ``n`` colours from blue to red from ``coolwarm``.
+    n : int, optional
+        Number of colours for the sequential/diverging schemes (default 8;
+        ignored for the categorical ones).
+
+    Returns
+    -------
+    list of str : hex colours, in cycle order.
+
+    Examples
+    --------
+    >>> pa.set_style("euclid", palette="categorical3")        # by name
+    >>> ax.set_prop_cycle(color=pa.euclid_colors("sequential", n=6))
+    """
+    key = _normalise(scheme)
+    if key in ("categorical1", "petroff8"):
+        return list(PETROFF8.values())
+    if key in ("categorical2", "okabeito"):
+        return list(OKABE_ITO.values())
+    if key in ("categorical3", "tolvibrant"):
+        return ["#000000", *TOL_VIBRANT.values()]
+    if key in ("sequential", "diverging"):
+        n = int(n)
+        if n < 1:
+            raise ValueError("n must be a positive integer")
+        cmap = plt.get_cmap("copper" if key == "sequential" else "coolwarm")
+        # Same sampling as niceplots: i/n for i = 0 ... n-1.
+        return [mcolors.to_hex(cmap(i / n)) for i in range(n)]
+    raise ValueError(
+        f"Unknown Euclid colour scheme {scheme!r}. Choose one of: categorical1, "
+        "categorical2, categorical3, sequential, diverging")
+
+
+def _resolve_palette(spec):
+    """A palette name, a dict of colours or any sequence of colours -> list."""
+    if isinstance(spec, str):
+        key = _normalise(spec)
+        if key in _NAMED_PALETTES:
+            return list(_NAMED_PALETTES[key])
+        try:
+            return euclid_colors(spec)
+        except ValueError:
+            options = ("default, okabe_ito, petroff8, petroff10, tol_vibrant, "
+                       "categorical1, categorical2, categorical3, sequential, "
+                       "diverging")
+            raise ValueError(f"Unknown palette {spec!r}. Choose one of: {options}; "
+                             "or pass a list of colours.") from None
+    if isinstance(spec, dict):
+        spec = spec.values()
+    colors = list(spec)
+    if not colors:
+        raise ValueError("palette must contain at least one colour")
+    return colors
 
 
 def lighten(color, amount=0.5):

@@ -3,7 +3,8 @@ import pytest
 
 import plotastro as pa
 
-JOURNAL_STYLES = ["mnras", "rasti", "aanda", "apj", "oja", "prd", "jcap", "natastro"]
+JOURNAL_STYLES = ["mnras", "rasti", "aanda", "apj", "oja", "prd", "jcap", "natastro",
+                  "euclid"]
 
 
 def test_all_style_files_exist():
@@ -22,7 +23,7 @@ def test_styles_registered_with_matplotlib():
 def test_set_style_applies_expected_params(key):
     pa.set_style(key)
     assert pa.current_journal() == key
-    assert len(plt.rcParams["axes.prop_cycle"]) == 12
+    assert len(plt.rcParams["axes.prop_cycle"]) == (8 if key == "euclid" else 12)
     assert plt.rcParams["savefig.format"] == "pdf"
     assert plt.rcParams["pdf.fonttype"] == 42
     assert plt.rcParams["text.usetex"] is False
@@ -42,7 +43,7 @@ def test_natastro_is_sans_serif():
 
 def test_aliases_and_presets():
     for alias, key in [("a&a", "aanda"), ("apjl", "apj"), ("nature", "natastro"),
-                       ("prl", "prd"), ("A&A", "aanda")]:
+                       ("prl", "prd"), ("A&A", "aanda"), ("ec", "euclid")]:
         pa.set_style(alias)
         assert pa.current_journal() == key
     # thesis/beamer share the mnras style file but get their own width
@@ -67,3 +68,57 @@ def test_usetex_flag():
     assert "newtx" in plt.rcParams["text.latex.preamble"]
     pa.set_style("natastro", usetex=True)
     assert "helvet" in plt.rcParams["text.latex.preamble"]
+    pa.set_style("euclid", usetex=True)   # niceplots: plain LaTeX, no preamble
+    assert plt.rcParams["text.usetex"] is True
+    assert plt.rcParams["text.latex.preamble"] == ""
+
+
+def test_euclid_follows_niceplots():
+    pa.set_style("euclid")
+    rc = plt.rcParams
+    assert rc["font.family"] == ["sans-serif"]
+    assert rc["font.size"] == 10
+    assert rc["mathtext.fontset"] == "cm"
+    assert tuple(rc["figure.figsize"]) == pytest.approx((4.0, 3.0))
+    assert rc["axes.grid"] is False
+    assert rc["xtick.minor.visible"] is False
+    assert rc["legend.frameon"] is True
+    assert rc["lines.linewidth"] == 1.0
+    assert rc["lines.markersize"] == 5.0
+    assert rc["xtick.major.size"] == 2.5
+    assert rc["xtick.major.pad"] == 5.0
+    assert rc["axes.xmargin"] == 0
+    cycle = [c["color"].lower() for c in rc["axes.prop_cycle"]]
+    assert cycle == list(pa.PETROFF8.values())
+    # niceplots' sizing convention: 4 x 3 in, two columns = twice that
+    assert pa.figsize("full", journal="euclid") == pytest.approx((8.0, 6.0))
+    assert pa.figsize("column", journal="euclid", aspect=1) == pytest.approx((4.0, 4.0))
+    # the other styles keep the golden ratio
+    assert pa.figsize("column", journal="mnras")[1] == pytest.approx(
+        240.0 / 72.27 * pa.GOLDEN)
+    # switching back must undo everything the Euclid style changed
+    pa.set_style("mnras")
+    assert plt.rcParams["axes.grid"] is True
+    assert plt.rcParams["xtick.minor.visible"] is True
+    assert plt.rcParams["legend.frameon"] is False
+    assert plt.rcParams["font.family"] == ["serif"]
+    assert plt.rcParams["axes.xmargin"] == pytest.approx(0.03)
+
+
+def test_palette_option():
+    pa.set_style("euclid", palette="categorical3")
+    cycle = [c["color"].lower() for c in plt.rcParams["axes.prop_cycle"]]
+    assert cycle == ["#000000", *pa.TOL_VIBRANT.values()]
+    pa.set_style("mnras", palette="okabe_ito")
+    cycle = [c["color"].lower() for c in plt.rcParams["axes.prop_cycle"]]
+    assert cycle == list(pa.OKABE_ITO.values())
+    pa.set_style("mnras", palette=pa.PETROFF8)              # a dict
+    assert len(plt.rcParams["axes.prop_cycle"]) == 8
+    pa.set_style("mnras", palette=["#123456", "#abcdef"])   # a list
+    assert len(plt.rcParams["axes.prop_cycle"]) == 2
+    pa.set_style("mnras", palette="diverging")              # niceplots name
+    assert len(plt.rcParams["axes.prop_cycle"]) == 8
+    with pytest.raises(ValueError, match="Unknown palette"):
+        pa.set_style("mnras", palette="rainbow")
+    with pytest.raises(ValueError, match="at least one colour"):
+        pa.set_style("mnras", palette=[])

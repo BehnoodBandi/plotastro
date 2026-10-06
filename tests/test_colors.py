@@ -6,7 +6,8 @@ import plotastro as pa
 
 
 def test_palettes_are_valid_hex():
-    for palette in (pa.COLORS, pa.OKABE_ITO, pa.PETROFF10):
+    for palette in (pa.COLORS, pa.OKABE_ITO, pa.PETROFF8, pa.PETROFF10,
+                    pa.TOL_VIBRANT):
         for c in palette.values():
             mcolors.to_rgb(c)  # raises on invalid colours
     for light, dark in pa.PAIRED.values():
@@ -62,3 +63,20 @@ def test_check_colors_and_figure():
     ax.plot([0, 1], [0, 1])
     out = pa.check_figure(src)
     assert len(out.axes) == 4  # original + 3 simulations
+
+
+def test_euclid_colors():
+    assert pa.euclid_colors() == list(pa.PETROFF8.values())
+    assert pa.euclid_colors("categorical1") == list(pa.PETROFF8.values())
+    assert pa.euclid_colors("categorical2") == list(pa.OKABE_ITO.values())
+    assert pa.euclid_colors("categorical3") == ["#000000", *pa.TOL_VIBRANT.values()]
+    assert pa.euclid_colors("Categorical-3") == pa.euclid_colors("categorical3")
+    seq = pa.euclid_colors("sequential", n=5)
+    assert len(seq) == 5
+    for c in seq:
+        mcolors.to_rgb(c)
+    assert len(pa.euclid_colors("diverging", n=3)) == 3
+    with pytest.raises(ValueError, match="Unknown Euclid colour scheme"):
+        pa.euclid_colors("categorical4")
+    with pytest.raises(ValueError, match="positive"):
+        pa.euclid_colors("sequential", n=0)

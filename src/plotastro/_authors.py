@@ -53,7 +53,7 @@ from pathlib import Path
 # Journals sharing an author-block format:
 _FORMATS = {
     "mnras": "mnras", "rasti": "mnras",
-    "aanda": "aanda",
+    "aanda": "aanda", "euclid": "aanda",   # Euclid papers use A&A's aaEC class
     "apj": "aastex", "oja": "aastex",
     "prd": "revtex",
     "jcap": "jcap",

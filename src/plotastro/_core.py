@@ -6,6 +6,7 @@ from pathlib import Path
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+from cycler import cycler
 
 STYLE_DIR = Path(__file__).resolve().parent / "styles"
 
@@ -43,6 +44,14 @@ JOURNALS = {
     "natastro": {"column": 253.23,    "full": 520.68,    "style": "natastro",
                  "tex": _SANS_TEX,
                  "name": "Nature Astronomy"},
+    # Euclid Consortium papers (A&A's aaEC class) in the look of the ECEB's
+    # niceplots, whose convention is to draw figures 4.0 in wide (8.0 in
+    # for two columns) at 10 pt and let LaTeX scale them into the column.
+    # No LaTeX preamble: matplotlib's own \sffamily gives Computer Modern
+    # Sans, as in niceplots.
+    "euclid":   {"column": 289.08,    "full": 578.16,    "style": "euclid",
+                 "tex": "", "aspect": 0.75,
+                 "name": "Euclid Consortium (A&A, niceplots look)"},
     # Not journals, but handy width presets (they use the MNRAS look):
     "thesis":   {"column": 426.79135, "full": 426.79135, "style": "mnras",
                  "tex": _SERIF_TEX,
@@ -58,6 +67,7 @@ _ALIASES = {
     "openjournal": "oja", "theoj": "oja", "openjournalofastrophysics": "oja",
     "prl": "prd", "aps": "prd", "revtex": "prd",
     "nature": "natastro", "natureastronomy": "natastro", "natastron": "natastro",
+    "ec": "euclid", "euclidconsortium": "euclid", "niceplots": "euclid",
     "mnras_full": "mnras",  # legacy name from the old set_size() API
 }
 
@@ -82,7 +92,8 @@ def current_journal():
 # Style activation
 # ----------------------------------------------------------------------
 
-def set_style(journal="mnras", *, usetex=False, grid=None, **rc_overrides):
+def set_style(journal="mnras", *, usetex=False, grid=None, palette=None,
+              **rc_overrides):
     """Activate the plotting style for a journal.
 
     Parameters
@@ -91,14 +102,24 @@ def set_style(journal="mnras", *, usetex=False, grid=None, **rc_overrides):
         One of ``"mnras"``, ``"rasti"``, ``"aanda"`` (aliases ``"a&a"``,
         ``"aa"``), ``"apj"`` (aliases ``"apjl"``, ``"aastex"``), ``"oja"``,
         ``"prd"`` (aliases ``"prl"``, ``"revtex"``), ``"jcap"``,
-        ``"natastro"`` (alias ``"nature"``), ``"thesis"`` or ``"beamer"``.
+        ``"natastro"`` (alias ``"nature"``), ``"euclid"`` (alias ``"ec"``;
+        Euclid Consortium papers in the look of the ECEB's niceplots),
+        ``"thesis"`` or ``"beamer"``.
     usetex : bool, optional
         If True, render all text with a real LaTeX installation using
         fonts matching the journal (newtx Times for the serif journals,
-        Helvetica for Nature Astronomy). Default False (portable mathtext).
+        Helvetica for Nature Astronomy, Computer Modern Sans for Euclid).
+        Default False (portable mathtext).
     grid : bool, optional
         Override the style's grid setting (the styles default to a
-        subtle grid; pass ``grid=False`` for a clean journal look).
+        subtle grid, except ``"euclid"``; pass ``grid=False`` for a clean
+        journal look).
+    palette : str or sequence of colours, optional
+        Replace the colour cycle. A name — ``"default"``, ``"okabe_ito"``,
+        ``"petroff8"``, ``"petroff10"``, ``"tol_vibrant"``, or one of the
+        Euclid niceplots schemes ``"categorical1"``, ``"categorical2"``,
+        ``"categorical3"``, ``"sequential"``, ``"diverging"`` (see
+        :func:`euclid_colors`) — or any list or dict of colours.
     **rc_overrides
         Any extra rcParams, e.g. ``set_style("mnras", **{"font.size": 10})``.
 
@@ -106,6 +127,7 @@ def set_style(journal="mnras", *, usetex=False, grid=None, **rc_overrides):
     --------
     >>> pa.set_style("aanda")
     >>> pa.set_style("mnras", usetex=True, grid=False)
+    >>> pa.set_style("euclid", palette="categorical3")
     """
     key = _resolve(journal)
     style_file = STYLE_DIR / f"{JOURNALS[key]['style']}.mplstyle"
@@ -121,6 +143,9 @@ def set_style(journal="mnras", *, usetex=False, grid=None, **rc_overrides):
         })
     if grid is not None:
         mpl.rcParams["axes.grid"] = bool(grid)
+    if palette is not None:
+        from ._colors import _resolve_palette  # (_colors imports figsize from here)
+        mpl.rcParams["axes.prop_cycle"] = cycler(color=_resolve_palette(palette))
     if rc_overrides:
         mpl.rcParams.update(rc_overrides)
 
@@ -135,7 +160,7 @@ use = set_style
 # ----------------------------------------------------------------------
 
 def figsize(width="column", *, journal=None, fraction=1.0, nrows=1, ncols=1,
-            aspect=GOLDEN, height=None):
+            aspect=None, height=None):
     """Figure dimensions (inches) that match the journal's text layout,
     so the figure is never rescaled (and its fonts shrunk) by LaTeX.
 
@@ -154,8 +179,9 @@ def figsize(width="column", *, journal=None, fraction=1.0, nrows=1, ncols=1,
         Subplot grid shape; the height scales so each panel keeps the
         requested aspect ratio.
     aspect : float, optional
-        Height/width ratio of one panel. Default: golden ratio (0.618).
-        Use ``aspect=1`` for square panels.
+        Height/width ratio of one panel. Default: the journal's own — the
+        golden ratio (0.618) everywhere except ``"euclid"``, which follows
+        niceplots' 4:3. Use ``aspect=1`` for square panels.
     height : float, optional
         Explicit figure height in inches (overrides ``aspect``).
 
@@ -164,6 +190,8 @@ def figsize(width="column", *, journal=None, fraction=1.0, nrows=1, ncols=1,
     (width_in, height_in) : tuple of float
     """
     key = _resolve(journal) if journal is not None else _state["journal"]
+    if aspect is None:
+        aspect = JOURNALS[key].get("aspect", GOLDEN)
     if isinstance(width, str):
         w = width.lower()
         if w in ("column", "col", "onecolumn", "one", "single"):
@@ -185,7 +213,7 @@ def figsize(width="column", *, journal=None, fraction=1.0, nrows=1, ncols=1,
 
 
 def subplots(nrows=1, ncols=1, *, width="column", journal=None, fraction=1.0,
-             aspect=GOLDEN, height=None, **kwargs):
+             aspect=None, height=None, **kwargs):
     """`plt.subplots` with the figure size computed by :func:`figsize`.
 
     Examples

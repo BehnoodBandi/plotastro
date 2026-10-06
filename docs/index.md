@@ -4,10 +4,10 @@
 
 One `pip install` gives you journal-matched styles for **MNRAS**, **RASTI**,
 **A&A**, **ApJ/ApJL**, the **Open Journal of Astrophysics**, **PRD/PRL**,
-**JCAP** and **Nature Astronomy** — figures at exactly the right physical
-size, a colour-blind-friendly palette, and helpers that make the tedious
-parts (sizing, panel labels, accessibility checks, author lists, saving)
-one-liners.
+**JCAP**, **Nature Astronomy** and **Euclid Consortium** papers — figures
+at exactly the right physical size, a colour-blind-friendly palette, and
+helpers that make the tedious parts (sizing, panel labels, accessibility
+checks, author lists, saving) one-liners.
 
 ```bash
 pip install plotastro
@@ -62,7 +62,9 @@ The styles share one visual language — Times-like serif fonts at ~9 pt with
 ~8 pt tick lettering, inward ticks on all four sides with minors, a subtle
 grid, frameless legends — and differ only in figure width (plus the
 sans-serif fonts Nature requires), so your plots stay **consistent between
-papers** no matter where you submit.
+papers** no matter where you submit. The one exception is `euclid`, which
+deliberately matches the Euclid Consortium's own niceplots look instead
+(see {doc}`journals`).
 
 ## Where to go next
 
