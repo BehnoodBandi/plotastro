@@ -9,7 +9,11 @@ build/
 docs/_build/
 docs/_figures/
 docs/tutorial.ipynb
+<<<<<<< HEAD
 .vscode/
 .gitignore
 .DS_Store
 .gitignore
+=======
+.vscode/
+>>>>>>> 9880486 (gitignore)
