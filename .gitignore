@@ -9,3 +9,4 @@ build/
 docs/_build/
 docs/_figures/
 docs/tutorial.ipynb
+.vscode/
