@@ -6,11 +6,11 @@
 pip install plotastro
 ```
 
-To try the latest **beta** (a pre-release; plain `pip install` keeps giving
-you the stable version):
+Betas (pre-releases) are opt-in: plain `pip install` gives you the latest
+stable version. When a beta newer than that is out, install it with:
 
 ```bash
-pip install --pre plotastro                # or: pip install "plotastro==1.1.0b2"
+pip install --pre plotastro
 pip install --pre "plotastro[cmasher]"     # the beta with CMasher
 ```
 
@@ -30,6 +30,16 @@ pip install "plotastro[cmasher]"     # or simply: pip install cmasher
 
 plotastro imports CMasher only when you ask for a CMasher colour, so it is
 never needed otherwise. (Installing with conda? `conda install -c conda-forge cmasher`.)
+
+## From conda-forge
+
+```bash
+conda install -c conda-forge plotastro             # or: mamba install -c conda-forge plotastro
+conda install -c conda-forge plotastro cmasher     # with CMasher
+```
+
+The conda-forge package needs Python 3.11 or newer (conda-forge's current
+minimum); on older Pythons, install with pip instead.
 
 ## From a clone
 

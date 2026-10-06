@@ -2,11 +2,15 @@
 # Visit https://bit.ly/cffinit to generate yours today!
 
 cff-version: 1.2.0
+<<<<<<<<< Temporary merge branch 1
 
 title: plotastro
-version: 1.1.0b2
+version: 1.1.0b1
 date-released: 2026-10-06
 
+=========
+title: plotastro
+>>>>>>>>> Temporary merge branch 2
 message: >-
   If you use this software, please cite it using the
   metadata from this file.
@@ -27,3 +31,4 @@ keywords:
   - Journals
   - matplotlib
 license: MIT
+>>>>>>>>> Temporary merge branch 2

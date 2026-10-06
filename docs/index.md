@@ -10,7 +10,7 @@ helpers that make the tedious parts (sizing, panel labels, accessibility
 checks, author lists, tables, saving) one-liners.
 
 ```bash
-pip install plotastro
+pip install plotastro                      # or: conda install -c conda-forge plotastro
 ```
 
 **Simplest usage — no new API to learn.** Importing plotastro registers the

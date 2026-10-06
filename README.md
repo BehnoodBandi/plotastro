@@ -1,6 +1,7 @@
 # plotastro
 
 [![PyPI](https://img.shields.io/pypi/v/plotastro.svg)](https://pypi.org/project/plotastro/)
+[![conda-forge](https://img.shields.io/conda/vn/conda-forge/plotastro.svg)](https://anaconda.org/conda-forge/plotastro)
 [![Python versions](https://img.shields.io/pypi/pyversions/plotastro.svg)](https://pypi.org/project/plotastro/)
 [![CI](https://github.com/BehnoodBandi/plotastro/actions/workflows/ci.yml/badge.svg)](https://github.com/BehnoodBandi/plotastro/actions/workflows/ci.yml)
 [![Docs](https://readthedocs.org/projects/plotastro/badge/?version=latest)](https://plotastro.readthedocs.io)
@@ -16,7 +17,7 @@ helpers that make the tedious parts (sizing, panel labels, accessibility
 checks, author lists, tables, saving) one-liners.
 
 ```bash
-pip install plotastro
+pip install plotastro                      # or: conda install -c conda-forge plotastro
 ```
 
 **Simplest usage — no new API to learn.** Importing plotastro registers the
