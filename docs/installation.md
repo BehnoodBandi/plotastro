@@ -6,17 +6,47 @@
 pip install plotastro
 ```
 
+Betas (pre-releases) are opt-in: plain `pip install` gives you the latest
+stable version. When a beta newer than that is out, install it with:
+
+```bash
+pip install --pre plotastro
+pip install --pre "plotastro[cmasher]"     # the beta with CMasher
+```
+
 The only hard dependency is matplotlib (≥ 3.5). plotastro works with both
 NumPy 1.x and 2.x — CI tests each — and with Python 3.9+. No LaTeX
 installation is required (LaTeX text rendering is optional, see
 {doc}`quickstart`).
+
+### Optional: CMasher colours and colormaps
+
+To use colours and colormaps from [CMasher](https://cmasher.readthedocs.io)
+(see {doc}`colors`), install it as well:
+
+```bash
+pip install "plotastro[cmasher]"     # or simply: pip install cmasher
+```
+
+plotastro imports CMasher only when you ask for a CMasher colour, so it is
+never needed otherwise. (Installing with conda? `conda install -c conda-forge cmasher`.)
+
+## From conda-forge
+
+```bash
+conda install -c conda-forge plotastro             # or: mamba install -c conda-forge plotastro
+conda install -c conda-forge plotastro cmasher     # with CMasher
+```
+
+The conda-forge package needs Python 3.11 or newer (conda-forge's current
+minimum); on older Pythons, install with pip instead.
 
 ## From a clone
 
 ```bash
 git clone https://github.com/BehnoodBandi/plotastro
 cd plotastro
-pip install -e ".[dev]"          # editable install + test dependencies
+pip install -e ".[dev]"          # editable install + test dependencies (incl. CMasher)
 pytest                           # optional: run the test suite
 ```
 

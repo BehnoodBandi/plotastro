@@ -1,5 +1,81 @@
 # Changelog
 
+## 1.1.0 — 2026-10-06
+
+The stable release of the 1.1 series: everything in the 1.1.0b1 and
+1.1.0b2 betas below, plus documentation. `pip install plotastro` now
+gives this version. No change in behaviour since 1.1.0b2.
+
+### Added
+- Install instructions for conda-forge
+  (`conda install -c conda-forge plotastro`, Python 3.11 or newer).
+- The API reference is split into one page per topic (styles, colours,
+  CMasher, markers, authors, accessibility). The colours page has a
+  longer guide to colormaps: which map suits which kind of data, lines
+  coloured by a parameter with a colour bar, diverging and cyclic data,
+  and common errors. The tutorial notebook runs the same examples.
+- The docstrings of `lighten`, `darken`, `check_colors`,
+  `current_journal`, `subplots`, `set_size`, `style_cycler`,
+  `show_colors`, `show_markers` and `show_linestyles` now list their
+  parameters and return values.
+- A test checks that every public name is in the API reference and that
+  the constants it shows match the code.
+
+## 1.1.0b2 — 2026-10-06 (beta)
+
+A pre-release: `pip install plotastro` still gives the stable 1.0.1. To try
+this beta, use `pip install --pre plotastro` (or `pip install
+"plotastro==1.1.0b2"`).
+
+### Changed
+- Legends now sit on a translucent white background (70 % opaque, no
+  border) instead of none, so they stay readable over data and grid
+  lines. The `euclid` style keeps niceplots' framed legends.
+
+## 1.1.0b1 — 2026-10-06 (beta)
+
+A pre-release: `pip install plotastro` still gives the stable 1.0.1. To try
+this beta, use `pip install --pre plotastro` (or `pip install
+"plotastro==1.1.0b1"`).
+
+### Added
+- `euclid` style (alias `ec`) for Euclid Consortium papers, adapted from
+  the Euclid Consortium Editorial Board's
+  [niceplots](https://gitlab.euclid-sgs.uk/ECEB/niceplots) (GPL-3.0,
+  Euclid-internal): sans-serif 10 pt text with Computer Modern maths, no
+  grid or minor ticks, framed legends, Petroff-8 colours, and niceplots'
+  4 × 3 in figure convention (LaTeX scales the figure into the A&A
+  column). The settings are re-expressed in plotastro's own template;
+  nothing is copied from niceplots.
+- Palettes `PETROFF8` and `TOL_VIBRANT`, and `euclid_colors(scheme, n=)`
+  giving niceplots' five colour schemes under their niceplots names.
+- `set_style(..., palette=...)` swaps the colour cycle for any named
+  palette or list of colours.
+- Optional [CMasher](https://cmasher.readthedocs.io) support, for discrete
+  colours and colormaps: `cmasher_colors(cmap, n=8, cmap_range=(0.15, 0.85))`
+  samples colours from a CMasher map, `cmasher_cmap(cmap, cmap_range=, n=)`
+  returns the map (optionally cut, or split into `n` levels), and
+  `set_style` accepts `palette="cmr.<name>"`. CMasher is **not** a
+  dependency: install it with `pip install "plotastro[cmasher]"` (or
+  `pip install cmasher`). plotastro imports it only when one of these is
+  used, and without it they raise an `ImportError` saying how to install it.
+- `set_style(..., cmap=...)` sets the default colormap: any matplotlib
+  name, or `"cmr.<name>"` for CMasher.
+
+### Changed
+- `figsize()` / `subplots()`: the default `aspect` now comes from the
+  journal (golden ratio everywhere except `euclid`, which uses 4:3).
+- `authorlist(..., journal="euclid")` uses the A&A format (Euclid's
+  `aaEC` class).
+
+### Fixed
+- Switching styles in one session no longer carries settings over.
+  matplotlib only overwrites the rcParams a style names, and the styles
+  named different ones: after `euclid`, for example, `set_style("mnras")`
+  or `plt.style.use("mnras")` kept Euclid's tick padding. Every style now
+  sets the same rcParams, using matplotlib's defaults where they apply,
+  and a test checks this.
+
 ## 1.0.1 — 2026-09-01
 
 ### Added

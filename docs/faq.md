@@ -44,3 +44,12 @@ looks the same on screen.
 `viridis` (the default), `magma` or `cividis` for sequential data;
 `RdBu_r`/`coolwarm` for diverging data. Avoid `jet` and `rainbow` — they
 are not perceptually uniform and are hostile to colour-blind readers.
+Change the default with `pa.set_style("mnras", cmap="cividis")`. For a
+much wider choice, install the optional CMasher package and use its maps,
+e.g. `cmap="cmr.rainforest"` (see {doc}`colors`).
+
+**Do I need CMasher?**
+No. It is an optional extra: plotastro only imports it when you use a
+`"cmr."` palette or colormap, or call `pa.cmasher_colors()` /
+`pa.cmasher_cmap()`. Without it, those raise an `ImportError` telling you
+how to install it; everything else works the same.

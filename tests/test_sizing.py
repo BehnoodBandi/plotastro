@@ -9,7 +9,8 @@ def test_column_and_full_widths():
     for key, spec in pa.JOURNALS.items():
         w, h = pa.figsize("column", journal=key)
         assert w == pytest.approx(spec["column"] / PT)
-        assert h == pytest.approx(w * pa.GOLDEN)
+        # each journal's own default aspect (golden ratio; 4:3 for euclid)
+        assert h == pytest.approx(w * spec.get("aspect", pa.GOLDEN))
         w_full, _ = pa.figsize("full", journal=key)
         assert w_full == pytest.approx(spec["full"] / PT)
 

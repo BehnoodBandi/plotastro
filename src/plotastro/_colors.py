@@ -1,9 +1,11 @@
-"""Palettes, colour utilities and colour-vision-deficiency checking."""
+"""Palettes, colour utilities, colour-vision-deficiency checking and the
+optional CMasher colormaps."""
 
 from __future__ import annotations
 
 import colorsys
 
+import matplotlib
 import matplotlib.colors as mcolors
 import matplotlib.pyplot as plt
 import numpy as np
@@ -63,6 +65,33 @@ PETROFF10 = {
     "cyan":   "#92dadd",
 }
 
+#: Petroff (2021) 8-colour palette — the sibling of :data:`PETROFF10`
+#: (matplotlib's "petroff8") and the default cycle of the Euclid
+#: Consortium's niceplots style (its "categorical1" scheme).
+PETROFF8 = {
+    "blue":       "#1845fb",
+    "orange":     "#ff5e02",
+    "red":        "#c91f16",
+    "magenta":    "#c849a9",
+    "khaki":      "#adad7d",
+    "lightblue":  "#86c8dd",
+    "cornflower": "#578dff",
+    "grey":       "#656364",
+}
+
+#: Paul Tol's "vibrant" qualitative scheme — 7 CVD-safe colours. The
+#: Euclid niceplots "categorical3" scheme is this palette with black in
+#: front (see :func:`euclid_colors`).
+TOL_VIBRANT = {
+    "orange":  "#ee7733",
+    "blue":    "#0077bb",
+    "cyan":    "#33bbee",
+    "magenta": "#ee3377",
+    "red":     "#cc3311",
+    "teal":    "#009988",
+    "grey":    "#bbbbbb",
+}
+
 #: Light/dark pairs (ColorBrewer "Paired") — ideal for data/model or
 #: before/after pairs: PAIRED["blue"] -> (light, dark). Note this palette
 #: is *not* fully CVD-safe on its own (it contains red and green); pair
@@ -76,12 +105,253 @@ PAIRED = {
     "brown":  ("#ffff99", "#b15928"),
 }
 
+# Palette names accepted by set_style(palette=...), normalised (lower
+# case, no separators). The Euclid niceplots scheme names are resolved
+# by euclid_colors().
+_NAMED_PALETTES = {
+    "default": CYCLE, "plotastro": CYCLE,
+    "okabeito": list(OKABE_ITO.values()),
+    "petroff8": list(PETROFF8.values()),
+    "petroff10": list(PETROFF10.values()),
+    "tolvibrant": list(TOL_VIBRANT.values()),
+}
+
+
+def _normalise(name):
+    return str(name).lower().replace("-", "").replace("_", "").replace(" ", "")
+
+
+def euclid_colors(scheme="categorical1", n=8):
+    """The colour schemes of the Euclid Consortium's niceplots, by the
+    names its ``initPlot(colortype=...)`` uses.
+
+    Parameters
+    ----------
+    scheme : str
+        ``"categorical1"`` — Petroff (2021) 8 colours, the Euclid default
+        (:data:`PETROFF8`); ``"categorical2"`` — Okabe & Ito
+        (:data:`OKABE_ITO`); ``"categorical3"`` — black followed by Tol's
+        *vibrant* scheme (:data:`TOL_VIBRANT`); ``"sequential"`` — ``n``
+        colours of increasing brightness from the ``copper`` colormap;
+        ``"diverging"`` — ``n`` colours from blue to red from ``coolwarm``.
+    n : int, optional
+        Number of colours for the sequential/diverging schemes (default 8;
+        ignored for the categorical ones).
+
+    Returns
+    -------
+    list of str : hex colours, in cycle order.
+
+    Examples
+    --------
+    >>> pa.set_style("euclid", palette="categorical3")        # by name
+    >>> ax.set_prop_cycle(color=pa.euclid_colors("sequential", n=6))
+    """
+    key = _normalise(scheme)
+    if key in ("categorical1", "petroff8"):
+        return list(PETROFF8.values())
+    if key in ("categorical2", "okabeito"):
+        return list(OKABE_ITO.values())
+    if key in ("categorical3", "tolvibrant"):
+        return ["#000000", *TOL_VIBRANT.values()]
+    if key in ("sequential", "diverging"):
+        n = int(n)
+        if n < 1:
+            raise ValueError("n must be a positive integer")
+        cmap = plt.get_cmap("copper" if key == "sequential" else "coolwarm")
+        # Same sampling as niceplots: i/n for i = 0 ... n-1.
+        return [mcolors.to_hex(cmap(i / n)) for i in range(n)]
+    raise ValueError(
+        f"Unknown Euclid colour scheme {scheme!r}. Choose one of: categorical1, "
+        "categorical2, categorical3, sequential, diverging")
+
+
+# ----------------------------------------------------------------------
+# CMasher colormaps (optional dependency)
+# ----------------------------------------------------------------------
+
+def _import_cmasher():
+    """Import CMasher on first use, so plotastro never requires it."""
+    try:
+        import cmasher
+    except ImportError:
+        raise ImportError(
+            "This feature needs the optional CMasher package "
+            "(https://cmasher.readthedocs.io): pip install cmasher, or "
+            "pip install 'plotastro[cmasher]'") from None
+    return cmasher
+
+
+def _is_cmasher_name(spec):
+    return isinstance(spec, str) and spec.strip().lower().startswith("cmr.")
+
+
+def _cmasher_name(cmap):
+    """A CMasher colormap name, with or without the ``cmr.`` prefix -> the
+    ``"cmr.<name>"`` under which importing CMasher registers it with
+    matplotlib (checked)."""
+    _import_cmasher()
+    name = str(cmap).strip().lower()
+    if not name.startswith("cmr."):
+        name = f"cmr.{name}"
+    if name not in matplotlib.colormaps:
+        raise ValueError(
+            f"Unknown CMasher colormap {cmap!r}. cmasher.get_cmap_list() lists "
+            "them all (see https://cmasher.readthedocs.io).")
+    return name
+
+
+def _cmasher_cmap(cmap):
+    """A CMasher colormap name or a Colormap -> the Colormap."""
+    if isinstance(cmap, mcolors.Colormap):
+        return cmap
+    return matplotlib.colormaps[_cmasher_name(cmap)]
+
+
+def cmasher_colors(cmap, n=8, *, cmap_range=(0.15, 0.85)):
+    """Discrete colours sampled from a `CMasher
+    <https://cmasher.readthedocs.io>`_ colormap — e.g. a colour cycle for
+    a family of lines. Needs the optional ``cmasher`` package.
+
+    Parameters
+    ----------
+    cmap : str or Colormap
+        A CMasher colormap name, with or without the ``"cmr."`` prefix
+        (``"rainforest"``, ``"cmr.torch_r"``, ...), or a Colormap object.
+    n : int, optional
+        Number of colours (default 8).
+    cmap_range : (float, float), optional
+        Part of the colormap to sample, in [0, 1]. The default
+        ``(0.15, 0.85)`` follows CMasher's own advice for line colours:
+        most of its sequential maps run from black to white, and those
+        ends vanish against the axes or the white page.
+
+    Returns
+    -------
+    list of str : ``n`` hex colours, equally spaced in ``cmap_range``.
+
+    Notes
+    -----
+    Sequential maps make the best line colours. For lines that should be
+    easy to tell apart, CMasher recommends maps with a large perceptual
+    range (``apple``, ``chroma``, ``neon``, ``rainforest``, ``torch``);
+    for lines that are steps of one quantity, a single-hue map
+    (``flamingo``, ``freeze``, ``gothic``, ``jungle``, ``ocean``).
+    Most diverging maps have a white or black centre, which the middle
+    colours approach.
+
+    Examples
+    --------
+    >>> pa.set_style("mnras", palette="cmr.rainforest")         # 8 colours
+    >>> ax.set_prop_cycle(color=pa.cmasher_colors("torch", n=5))
+    """
+    n = int(n)
+    if n < 1:
+        raise ValueError("n must be a positive integer")
+    cmr = _import_cmasher()
+    return [c.lower() for c in cmr.take_cmap_colors(
+        _cmasher_cmap(cmap), n, cmap_range=tuple(cmap_range), return_fmt="hex")]
+
+
+def cmasher_cmap(cmap, *, cmap_range=None, n=None):
+    """A `CMasher <https://cmasher.readthedocs.io>`_ colormap, optionally
+    cut to part of its range or split into ``n`` discrete colours. Needs
+    the optional ``cmasher`` package.
+
+    Parameters
+    ----------
+    cmap : str or Colormap
+        A CMasher colormap name, with or without the ``"cmr."`` prefix —
+        e.g. ``"rainforest"``, ``"cmr.iceburn"``, ``"ocean_r"`` — or a
+        Colormap object.
+    cmap_range : (float, float), optional
+        Keep only this part of the colormap (in [0, 1]), e.g.
+        ``(0.15, 0.85)`` to drop the black and white ends. CMasher
+        advises keeping at least half of a sequential map, so that it
+        stays smooth.
+    n : int, optional
+        Split the map into ``n`` discrete colours — for filled contours
+        or binned data.
+
+    Returns
+    -------
+    matplotlib.colors.Colormap
+
+    Examples
+    --------
+    >>> ax.imshow(img, cmap=pa.cmasher_cmap("rainforest"))
+    >>> ax.contourf(x, y, z, levels=6, cmap=pa.cmasher_cmap("iceburn", n=6))
+
+    Once CMasher has been imported (by this function, by
+    ``set_style(cmap=...)``, or by you), its maps can also be passed to
+    matplotlib by name: ``cmap="cmr.rainforest"``.
+    """
+    colormap = _cmasher_cmap(cmap)
+    if cmap_range is None and n is None:
+        return colormap
+    cmr = _import_cmasher()
+    start, stop = cmap_range if cmap_range is not None else (0, 1)
+    return cmr.get_sub_cmap(colormap, start, stop,
+                            N=None if n is None else int(n))
+
+
+def _resolve_cmap(spec):
+    """A colormap name (``"cmr.<name>"`` loads CMasher) -> the name, checked."""
+    if _is_cmasher_name(spec):
+        return _cmasher_name(spec)
+    if spec not in matplotlib.colormaps:
+        raise ValueError(
+            f"Unknown colormap {spec!r}. Use a matplotlib colormap name, or "
+            "'cmr.<name>' for a CMasher colormap.")
+    return spec
+
+
+def _resolve_palette(spec):
+    """A palette name, a dict of colours or any sequence of colours -> list."""
+    if isinstance(spec, str):
+        if _is_cmasher_name(spec):
+            return cmasher_colors(spec)
+        key = _normalise(spec)
+        if key in _NAMED_PALETTES:
+            return list(_NAMED_PALETTES[key])
+        try:
+            return euclid_colors(spec)
+        except ValueError:
+            options = ("default, okabe_ito, petroff8, petroff10, tol_vibrant, "
+                       "categorical1, categorical2, categorical3, sequential, "
+                       "diverging")
+            raise ValueError(f"Unknown palette {spec!r}. Choose one of: {options}; "
+                             "'cmr.<name>' for colours from a CMasher colormap; "
+                             "or pass a list of colours.") from None
+    if isinstance(spec, dict):
+        spec = spec.values()
+    colors = list(spec)
+    if not colors:
+        raise ValueError("palette must contain at least one colour")
+    return colors
+
 
 def lighten(color, amount=0.5):
-    """Lighten a colour by moving it towards white (0 = unchanged, 1 = white).
+    """Lighten a colour by moving it towards white.
 
-    Handy for e.g. filled uncertainty bands under a line of the same hue:
+    Handy for e.g. filled uncertainty bands under a line of the same hue,
+    without the colour shifts of ``alpha=`` where elements overlap.
 
+    Parameters
+    ----------
+    color : colour
+        Anything matplotlib understands (hex string, name, RGB tuple).
+    amount : float, optional
+        0 leaves the colour unchanged, 1 gives white (default 0.5). Hue
+        and saturation are kept, so a very dark saturated colour becomes
+        a strong, bright shade.
+
+    Returns
+    -------
+    (r, g, b) : tuple of float in [0, 1]
+
+    Examples
+    --------
     >>> ax.plot(x, y, color=pa.COLORS["blue"])
     >>> ax.fill_between(x, lo, hi, color=pa.lighten(pa.COLORS["blue"], 0.7))
     """
@@ -90,7 +360,24 @@ def lighten(color, amount=0.5):
 
 
 def darken(color, amount=0.5):
-    """Darken a colour by moving it towards black (0 = unchanged, 1 = black)."""
+    """Darken a colour by moving it towards black.
+
+    Parameters
+    ----------
+    color : colour
+        Anything matplotlib understands (hex string, name, RGB tuple).
+    amount : float, optional
+        0 leaves the colour unchanged, 1 gives black (default 0.5). Hue
+        and saturation are kept.
+
+    Returns
+    -------
+    (r, g, b) : tuple of float in [0, 1]
+
+    Examples
+    --------
+    >>> ax.plot(x, model, color=pa.darken(pa.COLORS["orange"], 0.3))
+    """
     h, l, s = colorsys.rgb_to_hls(*mcolors.to_rgb(color))
     return colorsys.hls_to_rgb(h, l * (1 - amount), s)
 
@@ -169,7 +456,7 @@ def simulate_cvd(colors, kind="deuteranopia"):
 
 def check_colors(palette=None, kinds=("deuteranopia", "protanopia", "greyscale")):
     """Show a palette next to CVD simulations of it, to verify that the
-    colours stay distinguishable. Returns the figure.
+    colours stay distinguishable.
 
     Parameters
     ----------
@@ -177,6 +464,15 @@ def check_colors(palette=None, kinds=("deuteranopia", "protanopia", "greyscale")
         Defaults to the package's colour cycle.
     kinds : sequence of str
         Simulations to include (see :func:`simulate_cvd`).
+
+    Returns
+    -------
+    Figure : one row of swatches per simulation, under the original.
+
+    Examples
+    --------
+    >>> pa.check_colors()                       # the default cycle
+    >>> pa.check_colors(pa.cmasher_colors("torch", n=6))
     """
     palette = palette if palette is not None else COLORS
     cols = list(palette.values()) if isinstance(palette, dict) else list(palette)

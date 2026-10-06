@@ -4,13 +4,13 @@
 
 One `pip install` gives you journal-matched styles for **MNRAS**, **RASTI**,
 **A&A**, **ApJ/ApJL**, the **Open Journal of Astrophysics**, **PRD/PRL**,
-**JCAP** and **Nature Astronomy** — figures at exactly the right physical
-size, a colour-blind-friendly palette, and helpers that make the tedious
-parts (sizing, panel labels, accessibility checks, author lists, saving)
-one-liners.
+**JCAP**, **Nature Astronomy** and **Euclid Consortium** papers — figures
+at exactly the right physical size, a colour-blind-friendly palette, and
+helpers that make the tedious parts (sizing, panel labels, accessibility
+checks, author lists, saving) one-liners.
 
 ```bash
-pip install plotastro
+pip install plotastro                      # or: conda install -c conda-forge plotastro
 ```
 
 **Simplest usage — no new API to learn.** Importing plotastro registers the
@@ -60,9 +60,11 @@ Two problems ruin most paper figures:
 
 The styles share one visual language — Times-like serif fonts at ~9 pt with
 ~8 pt tick lettering, inward ticks on all four sides with minors, a subtle
-grid, frameless legends — and differ only in figure width (plus the
+grid, legends on a translucent white background — and differ only in figure width (plus the
 sans-serif fonts Nature requires), so your plots stay **consistent between
-papers** no matter where you submit.
+papers** no matter where you submit. The one exception is `euclid`, which
+deliberately matches the Euclid Consortium's own niceplots look instead
+(see {doc}`journals`).
 
 ## Where to go next
 
@@ -70,7 +72,7 @@ papers** no matter where you submit.
 - {doc}`quickstart` — the five-minute version
 - {doc}`tutorial` — the full hands-on notebook, rendered
 - {doc}`journals` — supported journals and their figure widths
-- {doc}`colors` — the palettes and colour-blindness checking
+- {doc}`colors` — the palettes, colour-blindness checking and CMasher colormaps
 - {doc}`markers` — markers, line styles, cyclers and panel labels
 - {doc}`authors` — LaTeX author lists from your collaboration's CSV
 - {doc}`api` — every public function

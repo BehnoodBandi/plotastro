@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "plotastro"
-version = "1.0.1"
+version = "1.1.0"
 description = "Publication-quality matplotlib styles and helpers for astronomy journals (MNRAS, A&A, ApJ, OJA, PRD, JCAP, Nature Astronomy)"
 readme = "README.md"
 license = { text = "MIT" }
@@ -33,7 +33,9 @@ Homepage = "https://github.com/BehnoodBandi/plotastro"
 Issues = "https://github.com/BehnoodBandi/plotastro/issues"
 
 [project.optional-dependencies]
-dev = ["pytest", "numpy"]
+# CMasher colours/colormaps are optional: pip install "plotastro[cmasher]"
+cmasher = ["cmasher>=1.7"]
+dev = ["pytest", "numpy", "cmasher>=1.7"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/plotastro"]
