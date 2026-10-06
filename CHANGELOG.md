@@ -1,5 +1,26 @@
 # Changelog
 
+## 1.1.0 — 2026-10-06
+
+The stable release of the 1.1 series: everything in the 1.1.0b1 and
+1.1.0b2 betas below, plus documentation. `pip install plotastro` now
+gives this version. No change in behaviour since 1.1.0b2.
+
+### Added
+- Install instructions for conda-forge
+  (`conda install -c conda-forge plotastro`, Python 3.11 or newer).
+- The API reference is split into one page per topic (styles, colours,
+  CMasher, markers, authors, accessibility). The colours page has a
+  longer guide to colormaps: which map suits which kind of data, lines
+  coloured by a parameter with a colour bar, diverging and cyclic data,
+  and common errors. The tutorial notebook runs the same examples.
+- The docstrings of `lighten`, `darken`, `check_colors`,
+  `current_journal`, `subplots`, `set_size`, `style_cycler`,
+  `show_colors`, `show_markers` and `show_linestyles` now list their
+  parameters and return values.
+- A test checks that every public name is in the API reference and that
+  the constants it shows match the code.
+
 ## 1.1.0b2 — 2026-10-06 (beta)
 
 A pre-release: `pip install plotastro` still gives the stable 1.0.1. To try

@@ -6,11 +6,11 @@
 pip install plotastro
 ```
 
-To try the latest **beta** (a pre-release; plain `pip install` keeps giving
-you the stable version):
+Betas (pre-releases) are opt-in: plain `pip install` gives you the latest
+stable version. When a beta newer than that is out, install it with:
 
 ```bash
-pip install --pre plotastro                # or: pip install "plotastro==1.1.0b2"
+pip install --pre plotastro
 pip install --pre "plotastro[cmasher]"     # the beta with CMasher
 ```
 
