@@ -1,6 +1,10 @@
 # Changelog
 
-## Unreleased
+## 1.1.0b1 — 2026-10-06 (beta)
+
+A pre-release: `pip install plotastro` still gives the stable 1.0.1. To try
+this beta, use `pip install --pre plotastro` (or `pip install
+"plotastro==1.1.0b1"`).
 
 ### Added
 - `euclid` style (alias `ec`) for Euclid Consortium papers, adapted from
