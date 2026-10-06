@@ -10,7 +10,7 @@ To try the latest **beta** (a pre-release; plain `pip install` keeps giving
 you the stable version):
 
 ```bash
-pip install --pre plotastro                # or: pip install "plotastro==1.1.0b1"
+pip install --pre plotastro                # or: pip install "plotastro==1.1.0b2"
 pip install --pre "plotastro[cmasher]"     # the beta with CMasher
 ```
 
