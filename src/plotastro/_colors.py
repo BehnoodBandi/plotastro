@@ -332,10 +332,26 @@ def _resolve_palette(spec):
 
 
 def lighten(color, amount=0.5):
-    """Lighten a colour by moving it towards white (0 = unchanged, 1 = white).
+    """Lighten a colour by moving it towards white.
 
-    Handy for e.g. filled uncertainty bands under a line of the same hue:
+    Handy for e.g. filled uncertainty bands under a line of the same hue,
+    without the colour shifts of ``alpha=`` where elements overlap.
 
+    Parameters
+    ----------
+    color : colour
+        Anything matplotlib understands (hex string, name, RGB tuple).
+    amount : float, optional
+        0 leaves the colour unchanged, 1 gives white (default 0.5). Hue
+        and saturation are kept, so a very dark saturated colour becomes
+        a strong, bright shade.
+
+    Returns
+    -------
+    (r, g, b) : tuple of float in [0, 1]
+
+    Examples
+    --------
     >>> ax.plot(x, y, color=pa.COLORS["blue"])
     >>> ax.fill_between(x, lo, hi, color=pa.lighten(pa.COLORS["blue"], 0.7))
     """
@@ -344,7 +360,24 @@ def lighten(color, amount=0.5):
 
 
 def darken(color, amount=0.5):
-    """Darken a colour by moving it towards black (0 = unchanged, 1 = black)."""
+    """Darken a colour by moving it towards black.
+
+    Parameters
+    ----------
+    color : colour
+        Anything matplotlib understands (hex string, name, RGB tuple).
+    amount : float, optional
+        0 leaves the colour unchanged, 1 gives black (default 0.5). Hue
+        and saturation are kept.
+
+    Returns
+    -------
+    (r, g, b) : tuple of float in [0, 1]
+
+    Examples
+    --------
+    >>> ax.plot(x, model, color=pa.darken(pa.COLORS["orange"], 0.3))
+    """
     h, l, s = colorsys.rgb_to_hls(*mcolors.to_rgb(color))
     return colorsys.hls_to_rgb(h, l * (1 - amount), s)
 
@@ -423,7 +456,7 @@ def simulate_cvd(colors, kind="deuteranopia"):
 
 def check_colors(palette=None, kinds=("deuteranopia", "protanopia", "greyscale")):
     """Show a palette next to CVD simulations of it, to verify that the
-    colours stay distinguishable. Returns the figure.
+    colours stay distinguishable.
 
     Parameters
     ----------
@@ -431,6 +464,15 @@ def check_colors(palette=None, kinds=("deuteranopia", "protanopia", "greyscale")
         Defaults to the package's colour cycle.
     kinds : sequence of str
         Simulations to include (see :func:`simulate_cvd`).
+
+    Returns
+    -------
+    Figure : one row of swatches per simulation, under the original.
+
+    Examples
+    --------
+    >>> pa.check_colors()                       # the default cycle
+    >>> pa.check_colors(pa.cmasher_colors("torch", n=6))
     """
     palette = palette if palette is not None else COLORS
     cols = list(palette.values()) if isinstance(palette, dict) else list(palette)
