@@ -11,3 +11,5 @@ docs/_figures/
 docs/tutorial.ipynb
 .vscode/
 .DS_Store
+CHANGELOG.md
+.gitignore
