@@ -264,6 +264,9 @@ def authorlist(source, journal="mnras"):
     """
     from ._core import _resolve
     key = "generic" if str(journal).lower() == "generic" else _resolve(journal)
+    if key not in _FORMATS:   # the chemistry styles (rsc, acs), for now
+        raise ValueError(f"No author-list format for {key!r} yet; "
+                         f"use journal='generic' for a plain numbered block.")
     fmt = _FORMATS[key]
     authors = _read_authors(source)
     index = _affiliation_index(authors)

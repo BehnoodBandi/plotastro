@@ -1,8 +1,10 @@
 """Regenerate the .mplstyle files in src/plotastro/styles/ from templates.
 
 All journal styles share a single visual language (TEMPLATE); only the
-header, default figure size and (for Nature Astronomy) the font block
-differ. The one exception is "euclid", which reproduces the look of the
+header, default figure size and (for Nature Astronomy and the chemistry
+journals) the font block differ; the chemistry styles also apply the few
+DEFAULTS overrides their publishers' rules need. The one exception is
+"euclid", which reproduces the look of the
 Euclid Consortium's niceplots and therefore has its own EUCLID_TEMPLATE.
 Every style sets the same rcParams (writing out matplotlib's defaults where
 needed), so switching between styles in one session is clean; the tests
@@ -29,13 +31,31 @@ mathtext.fontset : stix          # Times-compatible maths without LaTeX
 SANS_FONTS = """font.family      : sans-serif
 font.sans-serif  : Arial, Helvetica, Nimbus Sans, DejaVu Sans
 font.serif       : DejaVu Serif, Bitstream Vera Serif, Computer Modern Roman, New Century Schoolbook, Century Schoolbook L, Utopia, ITC Bookman, Bookman, Nimbus Roman No9 L, Times New Roman, Times, Palatino, Charter, serif
-font.size        : 7             # Nature asks for 5-7 pt final lettering
+font.size        : {size}
 mathtext.fontset : dejavusans    # sans-serif maths without LaTeX
 
 # Full LaTeX text rendering (needs a working LaTeX installation).
 # Uncomment below, or call plotastro.set_style("{key}", usetex=True).
 #text.usetex         : True
 #text.latex.preamble : \\usepackage{{helvet}}\\usepackage{{sansmath}}\\sansmath\\renewcommand{{\\familydefault}}{{\\sfdefault}}"""
+
+# Values of TEMPLATE that a journal can override (through "overrides").
+DEFAULTS = {
+    "small": "small",            # tick labels and legend text
+    "small_note": "# ~1 pt below the base font size",
+    "minor_width": "0.4",        # minor tick width (pt)
+    "grid_width": "0.4",         # grid line width (pt)
+}
+
+# The chemistry styles (rsc, acs): every piece of text at 8 pt, since some
+# ACS journals ask for >= 8 pt, and no line thinner than ACS's 0.5 pt.
+CHEM_FONT_SIZE = "8             # all text at 8 pt (see the header)"
+CHEM = {
+    "small": "medium",
+    "small_note": "# = font.size",
+    "minor_width": "0.5",
+    "grid_width": "0.5",
+}
 
 JOURNALS = {
     "mnras": dict(
@@ -94,6 +114,7 @@ JOURNALS = {
                 "(Nature-family figure guide; note the SANS-SERIF fonts",
                 "and smaller lettering Nature requires)"],
         figsize="3.5039, 2.1656", fonts=SANS_FONTS,
+        font_size="7             # Nature asks for 5-7 pt final lettering",
     ),
     "euclid": dict(
         title="Euclid Consortium papers (A&A), in the look of niceplots",
@@ -101,6 +122,27 @@ JOURNALS = {
                 "the 88 mm A&A column; two columns: 8.00 in = 578.16 pt",
                 "(niceplots' convention, see the note below)"],
         figsize="4.0, 3.0", fonts=None, template="euclid",
+    ),
+    "rsc": dict(
+        title="Royal Society of Chemistry journals",
+        widths=["one column : 236.16 pt = 3.27 in (8.3 cm)",
+                "full width : 486.54 pt = 6.73 in (17.1 cm)",
+                "(RSC figure guide, the same for all RSC journals; at most",
+                "23.3 cm tall. RSC sets no font rules, so this uses the acs",
+                "style's SANS-SERIF lettering, with all text at 8 pt)"],
+        figsize="3.2677, 2.0196", fonts=SANS_FONTS, font_size=CHEM_FONT_SIZE,
+        overrides=CHEM,
+    ),
+    "acs": dict(
+        title="American Chemical Society journals",
+        widths=["one column : 240.90 pt = 3.33 in (240 PostScript pt)",
+                "full width : 505.89 pt = 7.00 in (504 PostScript pt)",
+                "(ACS author guidelines, the same for every ACS journal:",
+                "Helvetica or Arial lettering, so SANS-SERIF fonts; all text",
+                "at 8 pt, as some ACS journals ask for >= 8 pt; no line",
+                "thinner than 0.5 pt)"],
+        figsize="3.3333, 2.0601", fonts=SANS_FONTS, font_size=CHEM_FONT_SIZE,
+        overrides=CHEM,
     ),
 }
 
@@ -146,7 +188,7 @@ axes.prop_cycle : cycler('color', ['377eb8', 'ff7f00', '4daf4a', 'f781bf', 'a656
 
 ## ---- Grid (subtle; set axes.grid: False to disable) -----------------
 axes.grid      : True
-grid.linewidth : 0.4
+grid.linewidth : {grid_width}
 grid.alpha     : 0.25
 
 ## ---- Ticks: all four sides, pointing in, with minors ----------------
@@ -157,9 +199,9 @@ xtick.minor.visible : True
 xtick.major.size    : 3.5
 xtick.minor.size    : 2
 xtick.major.width   : 0.6
-xtick.minor.width   : 0.4
+xtick.minor.width   : {minor_width}
 xtick.major.pad     : 3.5        # matplotlib default
-xtick.labelsize     : small      # ~1 pt below the base font size
+xtick.labelsize     : {small:<11}{small_note}
 
 ytick.direction     : in
 ytick.left          : True
@@ -168,13 +210,13 @@ ytick.minor.visible : True
 ytick.major.size    : 3.5
 ytick.minor.size    : 2
 ytick.major.width   : 0.6
-ytick.minor.width   : 0.4
+ytick.minor.width   : {minor_width}
 ytick.major.pad     : 3.5
-ytick.labelsize     : small
+ytick.labelsize     : {small}
 
 ## ---- Legend ---------------------------------------------------------
-legend.fontsize       : small
-legend.title_fontsize : small
+legend.fontsize       : {small}
+legend.title_fontsize : {small}
 legend.frameon        : True
 legend.facecolor      : white
 legend.framealpha     : 0.7      # translucent background: readable over data and grid
@@ -350,11 +392,13 @@ def main():
     for key, cfg in JOURNALS.items():
         width_lines = "\n".join(f"#      {line}" for line in cfg["widths"])
         template = TEMPLATES[cfg.get("template", "default")]
-        fonts = cfg["fonts"].format(key=key) if cfg.get("fonts") else ""
+        fonts = (cfg["fonts"].format(key=key, size=cfg.get("font_size"))
+                 if cfg.get("fonts") else "")
+        values = {**DEFAULTS, **cfg.get("overrides", {})}
         text = template.format(key=key, title=cfg["title"],
                                width_lines=width_lines,
                                figsize=cfg["figsize"], fonts=fonts,
-                               palette=palette)
+                               palette=palette, **values)
         (OUTDIR / f"{key}.mplstyle").write_text(text)
         print(f"wrote {OUTDIR / (key + '.mplstyle')}")
 

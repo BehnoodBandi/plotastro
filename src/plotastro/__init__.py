@@ -17,8 +17,9 @@ Importing plotastro also registers the styles with matplotlib itself, so
 ``plt.style.use("mnras")`` works anywhere afterwards.
 
 Supported journals: MNRAS, RASTI, A&A, ApJ/ApJL (AASTeX), the Open Journal
-of Astrophysics, PRD/PRL (REVTeX), JCAP, Nature Astronomy and Euclid
-Consortium papers (the ECEB's niceplots look) — plus "thesis" and "beamer"
+of Astrophysics, PRD/PRL and the other Physical Review journals (REVTeX),
+JCAP, Nature Astronomy, Euclid Consortium papers (the ECEB's niceplots
+look), and the RSC and ACS chemistry journals — plus "thesis" and "beamer"
 width presets. Colours and colormaps from CMasher are an optional extra
 (``pip install cmasher``). See the README for the full tutorial.
 """

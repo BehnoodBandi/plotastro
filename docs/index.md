@@ -3,8 +3,10 @@
 **Publication-quality matplotlib figures for astronomy journals.**
 
 One `pip install` gives you journal-matched styles for **MNRAS**, **RASTI**,
-**A&A**, **ApJ/ApJL**, the **Open Journal of Astrophysics**, **PRD/PRL**,
-**JCAP**, **Nature Astronomy** and **Euclid Consortium** papers — figures
+**A&A**, **ApJ/ApJL**, the **Open Journal of Astrophysics**, **PRD/PRL** (and
+the other *Physical Review* journals), **JCAP**, **Nature Astronomy** and
+**Euclid Consortium** papers, as well as the chemistry journals of the
+**RSC** and the **ACS** — figures
 at exactly the right physical size, a colour-blind-friendly palette, and
 helpers that make the tedious parts (sizing, panel labels, accessibility
 checks, author lists, saving) one-liners.

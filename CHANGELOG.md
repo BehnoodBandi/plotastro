@@ -1,5 +1,21 @@
 # Changelog
 
+## Unreleased
+
+### Added
+- `rsc` style for all Royal Society of Chemistry journals (8.3 cm /
+  17.1 cm columns, from the RSC figure guide) and `acs` style for all
+  American Chemical Society journals (3.33 in / 7 in, from the ACS author
+  guidelines; aliases `jacs`, `achemso`). Both use sans-serif lettering
+  with all text at 8 pt, and no line thinner than 0.5 pt, as ACS asks.
+  `authorlist` has no format for them yet: it raises a `ValueError`
+  pointing to `journal="generic"`.
+
+### Changed
+- The documentation now says that `prd` suits every *Physical Review*
+  journal (PRL, PRA, PRB, PRC, PRE, PRX, ...), since they share the
+  REVTeX layout.
+
 ## 1.1.0 — 2026-10-06
 
 The stable release of the 1.1 series: everything in the 1.1.0b1 and

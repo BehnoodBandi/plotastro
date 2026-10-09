@@ -25,8 +25,9 @@ journal prints them. {doc}`../journals` describes each journal and
 ### Journal names
 
 `journal=` takes a key or an alias, in {func}`set_style`, {func}`figsize`,
-{func}`subplots` and {func}`authorlist`. Case, spaces and hyphens are
-ignored, so `"A&A"` and `"Open Journal"` work too.
+{func}`subplots` and {func}`authorlist` (which has no format for `rsc` and
+`acs` yet). Case, spaces and hyphens are ignored, so `"A&A"` and
+`"Open Journal"` work too.
 
 | key | journal | aliases |
 |---|---|---|
@@ -35,10 +36,12 @@ ignored, so `"A&A"` and `"Open Journal"` work too.
 | `aanda` | Astronomy & Astrophysics | `a&a`, `aa`, `astronomy&astrophysics` |
 | `apj` | The Astrophysical Journal (AASTeX) | `apjl`, `aj`, `aas`, `aastex` |
 | `oja` | The Open Journal of Astrophysics | `openjournal`, `theoj`, `openjournalofastrophysics` |
-| `prd` | Physical Review D (REVTeX 4.2) | `prl`, `aps`, `revtex` |
+| `prd` | Physical Review D (REVTeX 4.2); also the other *Physical Review* journals | `prl`, `aps`, `revtex` |
 | `jcap` | J. of Cosmology and Astroparticle Physics | |
 | `natastro` | Nature Astronomy | `nature`, `natureastronomy`, `natastron` |
 | `euclid` | Euclid Consortium (A&A, niceplots look) | `ec`, `euclidconsortium`, `niceplots` |
+| `rsc` | Royal Society of Chemistry journals | `royalsocietyofchemistry` |
+| `acs` | American Chemical Society journals | `americanchemicalsociety`, `jacs`, `achemso` |
 | `thesis` | A4 thesis text width (MNRAS look) | |
 | `beamer` | Beamer slide text width (MNRAS look) | |
 
@@ -56,7 +59,7 @@ plt.style.use("mnras")
 ```
 
 The registered names are the style files: `mnras`, `rasti`, `aanda`,
-`apj`, `oja`, `prd`, `jcap`, `natastro` and `euclid`. Each sets the
+`apj`, `oja`, `prd`, `jcap`, `natastro`, `euclid`, `rsc` and `acs`. Each sets the
 journal's fonts, ticks and colour cycle, and a one-column default figure
 size. Aliases, the `thesis` and `beamer` presets, and the extra options
 (`usetex`, `grid`, `palette`, `cmap`) are only available through

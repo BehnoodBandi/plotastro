@@ -52,7 +52,8 @@ $^{4}$Monash, School of Physics and Astronomy, Monash University, Wellington Roa
 }
 ```
 
-The same CSV works for every journal the package knows:
+The same CSV works for every journal the package knows, except the
+chemistry styles `rsc` and `acs`, which have no format yet:
 
 | `journal=` | output format |
 |---|---|

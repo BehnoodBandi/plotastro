@@ -4,7 +4,7 @@ import pytest
 import plotastro as pa
 
 JOURNAL_STYLES = ["mnras", "rasti", "aanda", "apj", "oja", "prd", "jcap", "natastro",
-                  "euclid"]
+                  "euclid", "rsc", "acs"]
 
 
 def test_all_style_files_exist():
@@ -41,9 +41,36 @@ def test_natastro_is_sans_serif():
     assert plt.rcParams["font.size"] == 9
 
 
+@pytest.mark.parametrize("key, column_in, full_in", [
+    ("rsc", 8.3 / 2.54, 17.1 / 2.54),     # RSC figure guide: 8.3 / 17.1 cm
+    ("acs", 240 / 72, 504 / 72),          # ACS: 240 / 504 PostScript pt
+])
+def test_chemistry_styles_follow_the_publisher_guides(key, column_in, full_in):
+    import matplotlib.font_manager as fm
+    assert pa.figsize("column", journal=key)[0] == pytest.approx(column_in, abs=1e-4)
+    assert pa.figsize("full", journal=key)[0] == pytest.approx(full_in, abs=1e-4)
+    pa.set_style(key)
+    rc = plt.rcParams
+    assert rc["font.family"] == ["sans-serif"]
+    assert rc["font.sans-serif"][:2] == ["Arial", "Helvetica"]
+    # every piece of text at 8 pt (some ACS journals ask for >= 8 pt)
+    for name in ("font.size", "axes.labelsize", "xtick.labelsize",
+                 "ytick.labelsize", "legend.fontsize", "legend.title_fontsize"):
+        size = fm.FontProperties(size=rc[name]).get_size_in_points()
+        assert size == pytest.approx(8), name
+    # no line thinner than 0.5 pt (ACS)
+    for name in ("axes.linewidth", "grid.linewidth", "xtick.major.width",
+                 "xtick.minor.width", "ytick.major.width", "ytick.minor.width",
+                 "lines.linewidth", "patch.linewidth", "lines.markeredgewidth"):
+        assert rc[name] >= 0.5, name
+    pa.set_style(key, usetex=True)
+    assert "helvet" in rc["text.latex.preamble"]
+
+
 def test_aliases_and_presets():
     for alias, key in [("a&a", "aanda"), ("apjl", "apj"), ("nature", "natastro"),
-                       ("prl", "prd"), ("A&A", "aanda"), ("ec", "euclid")]:
+                       ("prl", "prd"), ("A&A", "aanda"), ("ec", "euclid"),
+                       ("jacs", "acs"), ("Royal Society of Chemistry", "rsc")]:
         pa.set_style(alias)
         assert pa.current_journal() == key
     # thesis/beamer share the mnras style file but get their own width

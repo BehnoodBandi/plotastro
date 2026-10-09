@@ -21,7 +21,9 @@ example output.
 | `jcap` | jcappub lettered `\affiliation[a]` and `\emailAdd` |
 | `generic`, `natastro`, `thesis`, `beamer` | a plain block with numbered superscripts |
 
-Journal aliases work here too (see {ref}`api-journal-names`).
+Journal aliases work here too (see {ref}`api-journal-names`). The
+chemistry styles `rsc` and `acs` have no format yet: asking for one raises
+a `ValueError`, so use `generic` for those papers.
 
 ## Command line
 

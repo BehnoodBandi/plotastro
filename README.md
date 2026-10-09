@@ -10,8 +10,10 @@
 **Publication-quality matplotlib figures for astronomy journals.**
 
 One `pip install` gives you journal-matched styles for **MNRAS**, **RASTI**,
-**A&A**, **ApJ/ApJL**, the **Open Journal of Astrophysics**, **PRD/PRL**,
-**JCAP**, **Nature Astronomy** and **Euclid Consortium** papers — figures
+**A&A**, **ApJ/ApJL**, the **Open Journal of Astrophysics**, **PRD/PRL** (and
+the other *Physical Review* journals), **JCAP**, **Nature Astronomy** and
+**Euclid Consortium** papers, as well as the chemistry journals of the
+**RSC** and the **ACS** — figures
 at exactly the right physical size, a colour-blind-friendly palette, and
 helpers that make the tedious parts (sizing, panel labels, accessibility
 checks, saving) one-liners.
@@ -72,9 +74,11 @@ The styles share one visual language — Times-like serif fonts at ~9 pt with
 ~8 pt tick lettering, inward ticks on all four sides with minors, a subtle
 grid, legends on a translucent white background — and differ only in figure width (plus the
 sans-serif fonts Nature requires), so your plots stay **consistent between
-papers** no matter where you submit. The one exception is `euclid`, which
-deliberately matches the Euclid Consortium's own niceplots look instead
-(see below).
+papers** no matter where you submit. The chemistry styles (`rsc`, `acs`) keep
+the ticks, grid, legends and colours but follow their publishers' rules:
+sans-serif lettering, all of it at 8 pt, and no line thinner than 0.5 pt. The
+one style with a different look altogether is `euclid`, which deliberately
+matches the Euclid Consortium's own niceplots look instead (see below).
 
 ## Supported journals
 
@@ -88,10 +92,12 @@ deliberately matches the Euclid Consortium's own niceplots look instead
 | `aanda` (`a&a`, `aa`) | Astronomy & Astrophysics | 250.4 pt = 3.46 in (88 mm) | 512.2 pt = 7.09 in (180 mm) |
 | `apj` (`apjl`, `aastex`) | The Astrophysical Journal | 242.3 pt = 3.35 in | 513.1 pt = 7.10 in |
 | `oja` | Open Journal of Astrophysics | ≈245.3 pt = 3.39 in | ≈508 pt = 7.03 in |
-| `prd` (`prl`, `revtex`) | Physical Review D | 246.0 pt = 3.40 in | 510.0 pt = 7.06 in |
+| `prd` (`prl`, `revtex`) | Physical Review D, and the other *Physical Review* journals (PRL, PRA, PRB, PRC, PRE, PRX, ...), which share its REVTeX layout | 246.0 pt = 3.40 in | 510.0 pt = 7.06 in |
 | `jcap` | J. Cosmology & Astroparticle Phys. | single-column ≈455 pt = 6.30 in | — |
 | `natastro` (`nature`) | Nature Astronomy (sans-serif!) | 253.2 pt = 3.50 in (89 mm) | 520.7 pt = 7.20 in (183 mm) |
 | `euclid` (`ec`) | Euclid Consortium papers (A&A; niceplots look, sans-serif) | drawn 4.00 in = 289.1 pt, LaTeX scales it to 88 mm | 8.00 in = 578.2 pt (2 × column) |
+| `rsc` | All Royal Society of Chemistry journals (sans-serif) | 236.2 pt = 3.27 in (8.3 cm) | 486.5 pt = 6.73 in (17.1 cm) |
+| `acs` (`jacs`, `achemso`) | All American Chemical Society journals (sans-serif) | 240.9 pt = 3.33 in | 505.9 pt = 7.00 in |
 | `thesis` | A4 thesis text width | 426.8 pt = 5.91 in | — |
 | `beamer` | Beamer slide text width | 307.3 pt = 4.25 in | — |
 
@@ -99,6 +105,20 @@ Widths come from each journal's LaTeX class / author guide. For a custom
 document, put `\the\columnwidth` or `\the\textwidth` in your `.tex` body,
 compile, read the value off the page, and pass it directly:
 `pa.figsize(width=345.0)`.
+
+### Chemistry journals (RSC and ACS)
+
+Each chemistry publisher has one figure guide for all its journals, so
+there is one style per publisher. `rsc` covers every Royal Society of
+Chemistry journal (*Chemical Science*, *ChemComm*, *PCCP*, *RSC Advances*,
+...), at the RSC's 8.3 cm and 17.1 cm column widths. `acs` covers every
+American Chemical Society journal (*JACS*, *ACS Nano*, *Langmuir*, ...), at
+3.33 in and 7 in. ACS recommends Helvetica or Arial lettering, and some
+ACS journals ask for no text smaller than 8 pt, so both styles use
+sans-serif fonts with all text at 8 pt. ACS also asks for no line thinner
+than 0.5 pt, so the minor ticks and grid lines are 0.5 pt. RSC sets no
+font rules, so `rsc` uses the same lettering as `acs`. There is no
+author-list format for these journals yet (use `journal="generic"`).
 
 ### Euclid Consortium papers
 
@@ -411,10 +431,11 @@ $^{4}$Monash, School of Physics and Astronomy, Monash University, Wellington Roa
 }
 ```
 
-The same CSV works for every journal: `mnras`/`rasti`, `aanda`
-(`\inst`/`\institute`), `apj`/`oja` (AASTeX `\author`/`\affiliation` with
-ORCIDs), `prd` (REVTeX), `jcap` (lettered `\affiliation[a]`), or `generic`
-for a plain numbered block. A command-line tool ships with the package, so
+The same CSV works for every astronomy and physics journal: `mnras`/`rasti`,
+`aanda` (`\inst`/`\institute`), `apj`/`oja` (AASTeX `\author`/`\affiliation`
+with ORCIDs), `prd` (REVTeX), `jcap` (lettered `\affiliation[a]`), or
+`generic` for a plain numbered block (the chemistry journals have no
+format of their own yet). A command-line tool ships with the package, so
 co-authors who don't use Python can run it too:
 
 ```bash
@@ -512,6 +533,8 @@ files (CI checks they stay in sync). Releases: bump the version in
   [AAS Journals](https://journals.aas.org/graphics-guide/) ·
   [OJA](https://astro.theoj.org/site/instructions) ·
   [APS](https://journals.aps.org/authors) ·
-  [Nature](https://www.nature.com/nature/for-authors/formatting-guide)
+  [Nature](https://www.nature.com/nature/for-authors/formatting-guide) ·
+  [RSC](https://www.rsc.org/journals-books-databases/author-and-reviewer-hub/authors-information/prepare-and-format/figures-graphics-images/) ·
+  [ACS](https://researcher-resources.acs.org/publish/author_guidelines?coden=jacsat)
 
 MIT licensed — see [LICENSE](LICENSE).

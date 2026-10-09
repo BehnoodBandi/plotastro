@@ -52,6 +52,15 @@ JOURNALS = {
     "euclid":   {"column": 289.08,    "full": 578.16,    "style": "euclid",
                  "tex": "", "aspect": 0.75,
                  "name": "Euclid Consortium (A&A, niceplots look)"},
+    # Chemistry: one style per publisher, as each publisher's figure guide
+    # applies to all its journals. RSC: 8.3 cm / 17.1 cm. ACS: 240 / 504
+    # PostScript points (3.33 in / 7 in), i.e. 240.9 / 505.89 LaTeX pt.
+    "rsc":      {"column": 236.1579,  "full": 486.5421,  "style": "rsc",
+                 "tex": _SANS_TEX,
+                 "name": "Royal Society of Chemistry journals"},
+    "acs":      {"column": 240.9,     "full": 505.89,    "style": "acs",
+                 "tex": _SANS_TEX,
+                 "name": "American Chemical Society journals"},
     # Not journals, but handy width presets (they use the MNRAS look):
     "thesis":   {"column": 426.79135, "full": 426.79135, "style": "mnras",
                  "tex": _SERIF_TEX,
@@ -68,6 +77,8 @@ _ALIASES = {
     "prl": "prd", "aps": "prd", "revtex": "prd",
     "nature": "natastro", "natureastronomy": "natastro", "natastron": "natastro",
     "ec": "euclid", "euclidconsortium": "euclid", "niceplots": "euclid",
+    "royalsocietyofchemistry": "rsc",
+    "americanchemicalsociety": "acs", "jacs": "acs", "achemso": "acs",
     "mnras_full": "mnras",  # legacy name from the old set_size() API
 }
 
@@ -111,11 +122,14 @@ def set_style(journal="mnras", *, usetex=False, grid=None, palette=None,
         ``"prd"`` (aliases ``"prl"``, ``"revtex"``), ``"jcap"``,
         ``"natastro"`` (alias ``"nature"``), ``"euclid"`` (alias ``"ec"``;
         Euclid Consortium papers in the look of the ECEB's niceplots),
+        ``"rsc"`` (Royal Society of Chemistry journals), ``"acs"``
+        (American Chemical Society journals; alias ``"jacs"``),
         ``"thesis"`` or ``"beamer"``.
     usetex : bool, optional
         If True, render all text with a real LaTeX installation using
         fonts matching the journal (newtx Times for the serif journals,
-        Helvetica for Nature Astronomy, Computer Modern Sans for Euclid).
+        Helvetica for Nature Astronomy, RSC and ACS, Computer Modern Sans
+        for Euclid).
         Default False (portable mathtext).
     grid : bool, optional
         Override the style's grid setting (the styles default to a
