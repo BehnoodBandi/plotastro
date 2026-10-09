@@ -1,138 +1,41 @@
 # Colours
 
-## The default palette
-
-```{image} _figures/palette.png
-:alt: The default colour-blind-friendly cycle
-:width: 85%
-```
-
-The default cycle has 12 colours, all accessible by name via
-`plotastro.COLORS` (e.g. `pa.COLORS["blue"]`), or as matplotlib's
-`"C0"`…`"C11"` shorthands:
-
-- **C0–C8** are a colour-blind-safe re-ordering of the
-  [ColorBrewer](https://colorbrewer2.org) *Set1* qualitative palette
-  (popularised by [Thøger Rivera-Thorsen's CBcycle](https://gist.github.com/thriveth/8560036)).
-  Consecutive colours differ in **lightness as well as hue**, so adjacent
-  lines stay distinguishable under the common deficiencies (deuteranopia,
-  protanopia) *and* in greyscale print; the notorious red–green pair is
-  pushed far apart in the cycle (green is C2, red is C7), so plots with a
-  handful of lines never rely on it.
-- **C9–C11** are light companions (from Tableau's *Color Blind 10*): use
-  them for uncertainty bands, reference curves, or de-emphasised data
-  underneath a saturated line of the same hue.
-
-## Matched shades without transparency
-
-Better for print and EPS than `alpha=` (no colour shifts where elements
-overlap):
-
-```python
-ax.plot(x, y, color=pa.COLORS["blue"])
-ax.fill_between(x, lo, hi, color=pa.lighten(pa.COLORS["blue"], 0.7))
-pa.darken(pa.COLORS["orange"], 0.3)     # the other direction
-```
-
-## More palettes
-
-- `pa.OKABE_ITO` — [Okabe & Ito (2008)](https://jfly.uni-koeln.de/color/),
-  *the* classic CVD-safe recommendation for categorical colours in science;
-- `pa.PETROFF10` — [Petroff (2021)](https://arxiv.org/abs/2107.02270), the
-  CVD-optimised 10-colour cycle used across particle physics;
-- `pa.PETROFF8` — Petroff's 8-colour sibling, the default cycle of the
-  Euclid Consortium's [niceplots](https://gitlab.euclid-sgs.uk/ECEB/niceplots)
-  (and of the `euclid` style here);
-- `pa.TOL_VIBRANT` — [Paul Tol's](https://personal.sron.nl/~pault/) *vibrant*
-  qualitative scheme, 7 CVD-safe colours;
-- `pa.PAIRED` — light/dark pairs for data/model or before/after
-  comparisons: `pa.PAIRED["blue"]` → `("#a6cee3", "#1f78b4")`.
-
-Any of them can become the active cycle when you activate a style —
-`pa.set_style("mnras", palette="okabe_ito")` — or pass your own list of
-colours.
-
-## Euclid colour schemes
-
-The `euclid` style (see {doc}`journals`) and these colour schemes are
-adapted from the Euclid Consortium Editorial Board's
-[niceplots](https://gitlab.euclid-sgs.uk/ECEB/niceplots) (Euclid-internal,
-GPL-3.0): the colours are re-expressed here, nothing is copied from it.
-{func}`plotastro.euclid_colors` returns each scheme under its niceplots name:
-
-| scheme | colours |
-|---|---|
-| `"categorical1"` | Petroff (2021) 8 colours — `pa.PETROFF8`; the Euclid default |
-| `"categorical2"` | Okabe & Ito — `pa.OKABE_ITO` |
-| `"categorical3"` | black, then Tol's *vibrant* scheme — `pa.TOL_VIBRANT` |
-| `"sequential"` | `n` colours of increasing brightness from `copper` |
-| `"diverging"` | `n` colours from blue to red from `coolwarm` |
-
-```python
-pa.set_style("euclid", palette="categorical3")                 # by name
-ax.set_prop_cycle(color=pa.euclid_colors("sequential", n=6))   # per axes
-```
-
-## Checking accessibility yourself
-
-```{image} _figures/cvd_check.png
-:alt: The default palette under simulated colour-vision deficiencies
-:width: 85%
-```
-
-Don't take the palette's word for it — simulate it (Machado et al. 2009
-model, no extra dependencies):
-
-```python
-pa.check_colors()                 # any palette under deuteranopia/protanopia/greyscale
-pa.check_colors(pa.PAIRED)        # works on your own colour lists/dicts too
-pa.check_figure(fig)              # simulate a whole rendered figure — the
-                                  # final check before submission
-pa.simulate_cvd("#e41a1c", "deuteranopia")   # the raw transform
-```
-
-If two lines merge in any panel, add markers or dash patterns (see
-{doc}`markers`), or pick colours further apart in the cycle. MNRAS
-recommends [Color Oracle](https://colororacle.org) and ColorBrewer for
-exactly this; with plotastro it's built in.
-
-## Colormaps
-
-The styles default to `viridis` (perceptually uniform, CVD-safe). Good
-picks: `viridis`/`magma`/`cividis` for sequential data, `RdBu_r` or
-`coolwarm` for diverging data (red–*blue*, not red–green). Avoid
-`jet`/`rainbow`. To change the default for every `imshow`, `pcolormesh`,
-`scatter`, … pass `cmap=` when you activate a style:
-
-```python
-pa.set_style("mnras", cmap="cividis")
-```
-
-For many more maps, plotastro can use CMasher (next section); see also
-[cmocean](https://matplotlib.org/cmocean/).
-
-## CMasher colours and colormaps (optional)
-
 ```{image} _figures/cmasher.png
 :alt: A CMasher colour cycle for a family of lines, and a CMasher colormap on an image
 :width: 100%
 ```
 
-[CMasher](https://cmasher.readthedocs.io) (van der Velden 2020,
-[JOSS 5, 2004](https://doi.org/10.21105/joss.02004)) is a collection of
-scientific colormaps: sequential, diverging and cyclic, all designed to be
-perceptually uniform, and most of them colour-vision-deficiency friendly.
-plotastro can use them for discrete colours and for colormaps. CMasher is
-**not** a dependency of plotastro: install it only if you want it,
+For colours, plotastro recommends [CMasher](https://cmasher.readthedocs.io)
+(van der Velden 2020, [JOSS 5, 2004](https://doi.org/10.21105/joss.02004)),
+a collection of scientific colormaps: sequential, diverging and cyclic,
+all designed to be perceptually uniform, and most of them
+colour-vision-deficiency friendly. In its sequential maps the lightness
+rises steadily from one end to the other, so colours sampled from them
+stay distinct for readers with a colour-vision deficiency *and* in
+greyscale print. The same maps make the colormaps for images.
+
+One line gives every figure after it a CMasher colour cycle and a CMasher
+colormap:
+
+```python
+pa.set_style("mnras", palette="cmr.rainforest", cmap="cmr.ocean")
+```
+
+## Installing CMasher
+
+CMasher is **not** a dependency of plotastro. Install it alongside:
 
 ```bash
 pip install cmasher                # or: pip install "plotastro[cmasher]"
+conda install -c conda-forge cmasher
 ```
 
-and plotastro imports it only when you ask for a CMasher colour. Every
-other feature works the same without it.
+plotastro imports it only when you ask for a CMasher colour, and every
+other feature works the same without it. The styles keep their built-in
+colour cycle until you pass `palette="cmr.<name>"` (see
+[Without CMasher](#without-cmasher)).
 
-### Five ways to use it
+## Five ways to use CMasher
 
 | you want | write |
 |---|---|
@@ -149,7 +52,7 @@ registered with matplotlib. {func}`plotastro.cmasher_colors` and
 matplotlib need the `cmr.` prefix. Add `_r` to any name for the
 reversed map: `"cmr.rainforest_r"`.
 
-### Choosing a map
+## Choosing a map
 
 ```{image} _figures/cmasher_maps.png
 :alt: Recommended CMasher maps by type, each shown in colour and in greyscale
@@ -188,7 +91,7 @@ Things to know when choosing:
   `cmasher.view_cmap("cmr.torch", show_grayscale=True)` previews one. The
   [CMasher documentation](https://cmasher.readthedocs.io) shows them all.
 
-### Discrete colours
+## Discrete colours
 
 Pass a `"cmr."` name as the palette to get a colour cycle of 8 colours
 sampled from that map, or use {func}`plotastro.cmasher_colors` for a
@@ -232,7 +135,9 @@ for z, color in zip(redshifts, colors):
 
 `pa.lighten` keeps a colour's saturation, so the near-black end of a map
 turns into a strong, bright shade. For bands, start the range above the
-darkest end, e.g. `cmap_range=(0.3, 0.8)`.
+darkest end, e.g. `cmap_range=(0.3, 0.8)`. {func}`plotastro.darken` goes
+the other way. Both give opaque shades, which print better than `alpha=`
+(EPS has no transparency) and don't shift colour where elements overlap.
 
 More recipes:
 
@@ -249,10 +154,10 @@ More recipes:
   `pa.cmasher_colors("ocean_r", n=4)`.
 - **On a dark background**, such as dark slides, keep to the light part
   of the map: `pa.cmasher_colors("ocean", n=4, cmap_range=(0.4, 1.0))`.
-- **Check the result** with `pa.check_colors(colors)`, as for any other
-  palette.
+- **Check the result** with `pa.check_colors(colors)` (see
+  [Checking accessibility yourself](#checking-accessibility-yourself)).
 
-### Colormaps
+## Colormaps
 
 Make a CMasher map the default colormap with `set_style(cmap=...)`, or get
 the colormap itself with {func}`plotastro.cmasher_cmap`. It can also cut
@@ -343,7 +248,7 @@ Two more options of {func}`plotastro.cmasher_cmap`:
   `pa.cmasher_cmap("ocean", cmap_range=(0.1, 1.0))`. CMasher advises
   keeping at least half of a sequential map, so that it stays smooth.
 
-### One choice for a whole paper
+## One choice for a whole paper
 
 Set the colours and the colormap once, when you activate the style. Every
 figure after that uses them:
@@ -355,7 +260,32 @@ pa.set_style("mnras", palette="cmr.rainforest", cmap="cmr.ocean")
 Before submitting, check the finished figures with `pa.check_figure(fig)`
 (see [Checking accessibility yourself](#checking-accessibility-yourself)).
 
-### Co-authors without CMasher
+## Checking accessibility yourself
+
+```{image} _figures/cvd_check.png
+:alt: The colours of cmr.rainforest under simulated colour-vision deficiencies and in greyscale
+:width: 85%
+```
+
+Don't take any palette's word for it: simulate it (Machado et al. 2009
+model, no extra dependencies). The figure shows the 8 colours of
+`palette="cmr.rainforest"`. They stay distinct under each simulation,
+because each colour is lighter than the one before.
+
+```python
+colors = pa.cmasher_colors("rainforest")
+pa.check_colors(colors)           # under deuteranopia, protanopia and greyscale
+pa.check_figure(fig)              # simulate a whole rendered figure: the
+                                  # final check before submission
+pa.simulate_cvd(colors, "deuteranopia")      # the raw transform
+```
+
+If two lines merge in any panel, add markers or dash patterns (see
+{doc}`markers`), or sample fewer colours so they are further apart. MNRAS
+recommends [Color Oracle](https://colororacle.org) and ColorBrewer for
+exactly this; with plotastro it's built in.
+
+## Co-authors without CMasher
 
 Discrete colours are plain hex strings. To let a script run without
 CMasher installed, print the colours once and paste the list in its place:
@@ -368,7 +298,7 @@ print(pa.cmasher_colors("rainforest"))
 Colormaps can't be pasted in like this. Anyone running the colormap code
 needs CMasher installed.
 
-### Troubleshooting
+## Troubleshooting
 
 `ImportError: This feature needs the optional CMasher package`
 : CMasher isn't installed in the environment you're running:
@@ -390,3 +320,37 @@ needs CMasher installed.
 
 If you use CMasher in a paper, please cite it; `cmasher.get_bibtex()`
 prints the reference.
+
+## Without CMasher
+
+### Built-in palettes
+
+Without a `palette=`, the styles use plotastro's default cycle,
+`pa.COLORS` (matplotlib's `"C0"`…`"C11"`): a reordering of ColorBrewer
+*Set1*, followed by three light colours from Tableau's *Color Blind 10*.
+More palettes ship with the package, and each can be the cycle, e.g.
+`pa.set_style("mnras", palette="okabe_ito")`:
+
+- `pa.OKABE_ITO`, [Okabe & Ito (2008)](https://jfly.uni-koeln.de/color/);
+- `pa.PETROFF10` and `pa.PETROFF8`,
+  [Petroff (2021)](https://arxiv.org/abs/2107.02270) (matplotlib's
+  `petroff10` and `petroff8`);
+- `pa.TOL_VIBRANT`, [Paul Tol's](https://personal.sron.nl/~pault/)
+  *vibrant* scheme;
+- `pa.PAIRED`, light/dark pairs from ColorBrewer *Paired*:
+  `pa.PAIRED["blue"]` → `("#a6cee3", "#1f78b4")`.
+
+These palettes pick colours by hue, so they are not reliably accessible.
+Every one of them has pairs that print as the same grey (in the default
+cycle: brown and purple, green and grey). In the default cycle, brown and
+red are also hard to tell apart with protanopia. If you use them, pair
+the colours with markers or dash patterns ({doc}`markers`) and check the
+figure with `pa.check_figure(fig)`. {doc}`api/colors` lists their values.
+
+### Matplotlib colormaps
+
+The styles default to `viridis` (perceptually uniform, CVD-safe). Good
+matplotlib picks: `viridis`/`magma`/`cividis` for sequential data,
+`RdBu_r` or `coolwarm` for diverging data (red–*blue*, not red–green).
+Avoid `jet`/`rainbow`. `pa.set_style("mnras", cmap="cividis")` makes one
+the default. See also [cmocean](https://matplotlib.org/cmocean/).

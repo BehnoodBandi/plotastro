@@ -3,8 +3,8 @@
 Colours and colormaps from [CMasher](https://cmasher.readthedocs.io).
 CMasher is **optional**: install it with `pip install cmasher` (or
 `pip install "plotastro[cmasher]"`). plotastro imports it only when one of
-these features is used. See the {doc}`CMasher section of the colours guide <../colors>`
-for choosing a map and worked examples.
+these features is used. See the {doc}`colours guide <../colors>` for
+choosing a map and worked examples.
 
 ```{eval-rst}
 .. currentmodule:: plotastro

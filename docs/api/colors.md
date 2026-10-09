@@ -1,8 +1,14 @@
 # Palettes and colour tools
 
-The colour palettes plotastro ships, the Euclid colour schemes, and
-helpers for matched shades. See {doc}`../colors` for the guide, with
-swatches of the palettes.
+The colour palettes plotastro ships, and helpers for matched shades. See
+{doc}`../colors` for the guide.
+
+For accessible colours, take them from CMasher instead (see
+{doc}`cmasher`). Its sequential maps get steadily lighter from one end to
+the other, so colours sampled from them stay distinct for readers with a
+colour-vision deficiency and in greyscale print. The palettes below pick
+colours by hue, and each of them has pairs that print as the same grey.
+Check them with {func}`check_colors` before relying on colour alone.
 
 ```{eval-rst}
 .. currentmodule:: plotastro
@@ -18,11 +24,13 @@ gives the colours in order.
 .. py:data:: COLORS
    :type: dict[str, str]
 
-   The default colour-blind-friendly cycle of every style, by name. The
-   first nine are a colour-blind-safe reordering of ColorBrewer *Set1*;
-   the last three are light companions from Tableau's *Color Blind 10*,
-   for bands and de-emphasised data. Matplotlib's ``"C0"`` to ``"C11"``
-   refer to the same colours.
+   The default colour cycle of every style, by name. The first nine are
+   a reordering of ColorBrewer *Set1*; the last three are light
+   companions from Tableau's *Color Blind 10*, for bands and
+   de-emphasised data. Matplotlib's ``"C0"`` to ``"C11"`` refer to the
+   same colours. Several pairs print as the same grey (brown and purple,
+   green and grey), and brown and red are hard to tell apart with
+   protanopia.
 
    .. code-block:: python
 
@@ -51,9 +59,7 @@ gives the colours in order.
 .. py:data:: PETROFF8
    :type: dict[str, str]
 
-   Petroff (2021), 8 colours: matplotlib's ``petroff8`` and the default
-   cycle of the Euclid Consortium's niceplots (its ``"categorical1"``
-   scheme, and the cycle of the ``euclid`` style).
+   Petroff (2021), 8 colours: matplotlib's ``petroff8``.
 
    .. code-block:: python
 
@@ -78,8 +84,7 @@ gives the colours in order.
    :type: dict[str, str]
 
    Paul Tol's *vibrant* qualitative scheme: 7 colours, safe for
-   colour-vision deficiencies. Niceplots' ``"categorical3"`` is this
-   palette with black in front.
+   colour-vision deficiencies.
 
    .. code-block:: python
 
@@ -101,8 +106,6 @@ gives the colours in order.
       {"blue": ("#a6cee3", "#1f78b4"), "green": ("#b2df8a", "#33a02c"),
        "red": ("#fb9a99", "#e31a1c"), "orange": ("#fdbf6f", "#ff7f00"),
        "purple": ("#cab2d6", "#6a3d9a"), "brown": ("#ffff99", "#b15928")}
-
-.. autofunction:: euclid_colors
 ```
 
 (api-palette-names)=
@@ -113,12 +116,11 @@ hyphens, underscores and spaces in the name are ignored.
 
 | `palette=` | colours |
 |---|---|
+| `"cmr.<name>"` | 8 colours from a CMasher colormap, from {func}`cmasher_colors` (see {doc}`cmasher`) |
 | `"default"` (or `"plotastro"`) | {data}`COLORS` |
 | `"okabe_ito"` | {data}`OKABE_ITO` |
 | `"petroff8"`, `"petroff10"` | {data}`PETROFF8`, {data}`PETROFF10` |
 | `"tol_vibrant"` | {data}`TOL_VIBRANT` |
-| `"categorical1"`, `"categorical2"`, `"categorical3"`, `"sequential"`, `"diverging"` | the Euclid schemes, from {func}`euclid_colors` (8 colours for the last two) |
-| `"cmr.<name>"` | 8 colours from a CMasher colormap, from {func}`cmasher_colors` (see {doc}`cmasher`) |
 | a list or dict of colours | those colours |
 
 ## Shades

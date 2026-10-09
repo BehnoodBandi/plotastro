@@ -36,22 +36,21 @@ same features in use.
 
 ## Colours
 
-**{doc}`api/colors`**
-
-| name | what it does |
-|---|---|
-| {data}`~plotastro.COLORS`, {data}`~plotastro.CYCLE` | the default colour-blind-friendly cycle, by name and in order |
-| {data}`~plotastro.OKABE_ITO`, {data}`~plotastro.PETROFF8`, {data}`~plotastro.PETROFF10`, {data}`~plotastro.TOL_VIBRANT`, {data}`~plotastro.PAIRED` | more palettes |
-| {func}`~plotastro.euclid_colors` | the Euclid niceplots colour schemes, by name |
-| {func}`~plotastro.lighten`, {func}`~plotastro.darken` | matched shades without transparency |
-| {func}`~plotastro.show_colors` | swatch chart of a palette |
-
 **{doc}`api/cmasher`** (optional `cmasher` package)
 
 | name | what it does |
 |---|---|
 | {func}`~plotastro.cmasher_colors` | `n` discrete colours sampled from a CMasher colormap |
 | {func}`~plotastro.cmasher_cmap` | a CMasher colormap, optionally cut or split into levels |
+
+**{doc}`api/colors`**
+
+| name | what it does |
+|---|---|
+| {data}`~plotastro.COLORS`, {data}`~plotastro.CYCLE` | the default colour cycle, by name and in order |
+| {data}`~plotastro.OKABE_ITO`, {data}`~plotastro.PETROFF8`, {data}`~plotastro.PETROFF10`, {data}`~plotastro.TOL_VIBRANT`, {data}`~plotastro.PAIRED` | more palettes |
+| {func}`~plotastro.lighten`, {func}`~plotastro.darken` | matched shades without transparency |
+| {func}`~plotastro.show_colors` | swatch chart of a palette |
 
 **{doc}`api/accessibility`**
 
@@ -89,8 +88,8 @@ api/markers
 :hidden:
 :caption: Colours
 
-api/colors
 api/cmasher
+api/colors
 api/accessibility
 ```
 

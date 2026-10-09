@@ -12,6 +12,9 @@ import plotastro as pa
 
 API_DIR = Path(__file__).resolve().parents[1] / "docs" / "api"
 
+# Public names deliberately left out of the documentation.
+UNDOCUMENTED = {"euclid_colors"}
+
 
 def test_every_public_name_is_in_the_api_reference():
     text = "\n".join(page.read_text(encoding="utf-8")
@@ -19,7 +22,7 @@ def test_every_public_name_is_in_the_api_reference():
     documented = set(re.findall(
         r"^\.\. (?:autofunction|py:function|py:data):: (?:plotastro\.)?(\w+)",
         text, re.MULTILINE))
-    missing = sorted(set(pa.__all__) - documented)
+    missing = sorted(set(pa.__all__) - documented - UNDOCUMENTED)
     assert not missing, f"public names missing from docs/api/: {missing}"
 
 

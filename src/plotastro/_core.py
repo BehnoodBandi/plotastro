@@ -120,29 +120,23 @@ def set_style(journal="mnras", *, usetex=False, grid=None, palette=None,
         One of ``"mnras"``, ``"rasti"``, ``"aanda"`` (aliases ``"a&a"``,
         ``"aa"``), ``"apj"`` (aliases ``"apjl"``, ``"aastex"``), ``"oja"``,
         ``"prd"`` (aliases ``"prl"``, ``"revtex"``), ``"jcap"``,
-        ``"natastro"`` (alias ``"nature"``), ``"euclid"`` (alias ``"ec"``;
-        Euclid Consortium papers in the look of the ECEB's niceplots),
-        ``"rsc"`` (Royal Society of Chemistry journals), ``"acs"``
-        (American Chemical Society journals; alias ``"jacs"``),
-        ``"thesis"`` or ``"beamer"``.
+        ``"natastro"`` (alias ``"nature"``), ``"rsc"`` (Royal Society of
+        Chemistry journals), ``"acs"`` (American Chemical Society
+        journals; alias ``"jacs"``), ``"thesis"`` or ``"beamer"``.
     usetex : bool, optional
         If True, render all text with a real LaTeX installation using
         fonts matching the journal (newtx Times for the serif journals,
-        Helvetica for Nature Astronomy, RSC and ACS, Computer Modern Sans
-        for Euclid).
+        Helvetica for Nature Astronomy, RSC and ACS).
         Default False (portable mathtext).
     grid : bool, optional
         Override the style's grid setting (the styles default to a
-        subtle grid, except ``"euclid"``; pass ``grid=False`` for a clean
-        journal look).
+        subtle grid; pass ``grid=False`` for a clean journal look).
     palette : str or sequence of colours, optional
-        Replace the colour cycle. A name — ``"default"``, ``"okabe_ito"``,
-        ``"petroff8"``, ``"petroff10"``, ``"tol_vibrant"``, or one of the
-        Euclid niceplots schemes ``"categorical1"``, ``"categorical2"``,
-        ``"categorical3"``, ``"sequential"``, ``"diverging"`` (see
-        :func:`euclid_colors`); ``"cmr.<name>"`` for 8 colours sampled
-        from a CMasher colormap (see :func:`cmasher_colors`) — or any
-        list or dict of colours.
+        Replace the colour cycle. ``"cmr.<name>"`` gives 8 colours
+        sampled from a CMasher colormap (see :func:`cmasher_colors`);
+        the built-in names are ``"default"``, ``"okabe_ito"``,
+        ``"petroff8"``, ``"petroff10"`` and ``"tol_vibrant"``. Any list
+        or dict of colours works too.
     cmap : str, optional
         Default colormap for ``imshow``, ``pcolormesh``, ``scatter`` etc.
         (the styles use ``viridis``): any matplotlib colormap name, or
@@ -156,7 +150,6 @@ def set_style(journal="mnras", *, usetex=False, grid=None, palette=None,
     --------
     >>> pa.set_style("aanda")
     >>> pa.set_style("mnras", usetex=True, grid=False)
-    >>> pa.set_style("euclid", palette="categorical3")
     >>> pa.set_style("mnras", palette="cmr.rainforest", cmap="cmr.ocean")
     """
     key = _resolve(journal)
@@ -217,9 +210,8 @@ def figsize(width="column", *, journal=None, fraction=1.0, nrows=1, ncols=1,
         Subplot grid shape; the height scales so each panel keeps the
         requested aspect ratio.
     aspect : float, optional
-        Height/width ratio of one panel. Default: the journal's own — the
-        golden ratio (0.618) everywhere except ``"euclid"``, which follows
-        niceplots' 4:3. Use ``aspect=1`` for square panels.
+        Height/width ratio of one panel. Default: the journal's own,
+        the golden ratio (0.618). Use ``aspect=1`` for square panels.
     height : float, optional
         Explicit figure height in inches (overrides ``aspect``).
 

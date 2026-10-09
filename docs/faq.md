@@ -41,12 +41,12 @@ EPS has no transparency support. Replace `alpha=` with
 looks the same on screen.
 
 **Which colormap should I use?**
-`viridis` (the default), `magma` or `cividis` for sequential data;
-`RdBu_r`/`coolwarm` for diverging data. Avoid `jet` and `rainbow` — they
-are not perceptually uniform and are hostile to colour-blind readers.
-Change the default with `pa.set_style("mnras", cmap="cividis")`. For a
-much wider choice, install the optional CMasher package and use its maps,
-e.g. `cmap="cmr.rainforest"` (see {doc}`colors`).
+A CMasher map, from the optional CMasher package: e.g.
+`pa.set_style("mnras", cmap="cmr.ocean")`. {doc}`colors` shows which map
+suits which kind of data. With matplotlib alone: `viridis` (the default),
+`magma` or `cividis` for sequential data; `RdBu_r`/`coolwarm` for
+diverging data. Avoid `jet` and `rainbow` — they are not perceptually
+uniform and are hostile to colour-blind readers.
 
 **Do I need CMasher?**
 No. It is an optional extra: plotastro only imports it when you use a

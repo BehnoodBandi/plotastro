@@ -86,14 +86,11 @@ ax.set_ylabel("$y$")
 ax.legend()
 save(fig, "redundant_encoding")
 
-# --------------------------------------------------------------- CVD check
-save(pa.check_colors(), "cvd_check")
-
 # ------------------------------------------- CMasher colours (optional extra)
 try:
     import cmasher  # noqa: F401  (only to check it is installed)
 except ImportError:
-    print("cmasher not installed: skipping figures/cmasher.png")
+    print("cmasher not installed: skipping the CMasher figures")
 else:
     pa.set_style("mnras", palette="cmr.rainforest", cmap="cmr.ocean")
     fig, axes = pa.subplots(1, 2, width="full", aspect=0.75)
@@ -115,6 +112,9 @@ else:
     fig.colorbar(im, ax=axes[1], label="density")
     pa.label_panels(axes, loc="lower right")[1].set_color("white")
     save(fig, "cmasher")
+
+    # ----------------------------------------- CVD check of a CMasher cycle
+    save(pa.check_colors(pa.cmasher_colors("rainforest")), "cvd_check")
 
     # ------------------------- which CMasher map for which job (overview)
     # Each strip: the map on top, what it becomes in greyscale print below.

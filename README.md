@@ -11,12 +11,11 @@
 
 One `pip install` gives you journal-matched styles for **MNRAS**, **RASTI**,
 **A&A**, **ApJ/ApJL**, the **Open Journal of Astrophysics**, **PRD/PRL** (and
-the other *Physical Review* journals), **JCAP**, **Nature Astronomy** and
-**Euclid Consortium** papers, as well as the chemistry journals of the
-**RSC** and the **ACS** — figures
-at exactly the right physical size, a colour-blind-friendly palette, and
-helpers that make the tedious parts (sizing, panel labels, accessibility
-checks, saving) one-liners.
+the other *Physical Review* journals), **JCAP** and **Nature Astronomy**,
+as well as the chemistry journals of the **RSC** and the **ACS** — figures
+at exactly the right physical size, accessible colours and colormaps from
+CMasher, and helpers that make the tedious parts (sizing, panel labels,
+accessibility checks, saving) one-liners.
 
 ```bash
 pip install plotastro                      # or: conda install -c conda-forge plotastro
@@ -67,8 +66,12 @@ Two problems ruin most paper figures:
 2. **Inaccessible colours.** ~5 % of male readers have a colour-vision
    deficiency, and MNRAS's
    [author guidelines](https://academic.oup.com/mnras/pages/general_instructions)
-   explicitly ask for colour-blind-friendly figures. The default matplotlib
-   cycle is not; the one here is — and `pa.check_figure()` lets you verify it.
+   explicitly ask for colour-blind-friendly figures, and many readers print
+   in greyscale. Hand-picked colour cycles, matplotlib's default among them,
+   have colours that merge for these readers. Colours taken from
+   [CMasher](https://cmasher.readthedocs.io)'s maps stay distinct:
+   `pa.set_style("mnras", palette="cmr.rainforest")`. Then
+   `pa.check_figure()` lets you verify the finished figure.
 
 The styles share one visual language — Times-like serif fonts at ~9 pt with
 ~8 pt tick lettering, inward ticks on all four sides with minors, a subtle
@@ -76,9 +79,7 @@ grid, legends on a translucent white background — and differ only in figure wi
 sans-serif fonts Nature requires), so your plots stay **consistent between
 papers** no matter where you submit. The chemistry styles (`rsc`, `acs`) keep
 the ticks, grid, legends and colours but follow their publishers' rules:
-sans-serif lettering, all of it at 8 pt, and no line thinner than 0.5 pt. The
-one style with a different look altogether is `euclid`, which deliberately
-matches the Euclid Consortium's own niceplots look instead (see below).
+sans-serif lettering, all of it at 8 pt, and no line thinner than 0.5 pt.
 
 ## Supported journals
 
@@ -95,7 +96,6 @@ matches the Euclid Consortium's own niceplots look instead (see below).
 | `prd` (`prl`, `revtex`) | Physical Review D, and the other *Physical Review* journals (PRL, PRA, PRB, PRC, PRE, PRX, ...), which share its REVTeX layout | 246.0 pt = 3.40 in | 510.0 pt = 7.06 in |
 | `jcap` | J. Cosmology & Astroparticle Phys. | single-column ≈455 pt = 6.30 in | — |
 | `natastro` (`nature`) | Nature Astronomy (sans-serif!) | 253.2 pt = 3.50 in (89 mm) | 520.7 pt = 7.20 in (183 mm) |
-| `euclid` (`ec`) | Euclid Consortium papers (A&A; niceplots look, sans-serif) | drawn 4.00 in = 289.1 pt, LaTeX scales it to 88 mm | 8.00 in = 578.2 pt (2 × column) |
 | `rsc` | All Royal Society of Chemistry journals (sans-serif) | 236.2 pt = 3.27 in (8.3 cm) | 486.5 pt = 6.73 in (17.1 cm) |
 | `acs` (`jacs`, `achemso`) | All American Chemical Society journals (sans-serif) | 240.9 pt = 3.33 in | 505.9 pt = 7.00 in |
 | `thesis` | A4 thesis text width | 426.8 pt = 5.91 in | — |
@@ -119,33 +119,6 @@ sans-serif fonts with all text at 8 pt. ACS also asks for no line thinner
 than 0.5 pt, so the minor ticks and grid lines are 0.5 pt. RSC sets no
 font rules, so `rsc` uses the same lettering as `acs`. There is no
 author-list format for these journals yet (use `journal="generic"`).
-
-### Euclid Consortium papers
-
-`pa.set_style("euclid")` reproduces the look of
-[niceplots](https://gitlab.euclid-sgs.uk/ECEB/niceplots), the Euclid
-Consortium Editorial Board's matplotlib style for Euclid papers
-(Euclid-internal, GPL-3.0; set up by Lukas Hergt, with tweaks by Laila
-Linke). The style and its colour schemes are **adapted from that
-repository**: the settings are re-expressed in plotastro's own template and
-nothing is copied from it. How it differs from the other styles:
-
-- sans-serif text at 10 pt with Computer Modern maths, no grid, no minor
-  ticks, framed legends, and `axes.xmargin = 0`;
-- the default cycle is Petroff's 8-colour palette (`pa.PETROFF8`);
-  niceplots' other schemes are available under their niceplots names —
-  `pa.set_style("euclid", palette="categorical3")` or
-  `pa.euclid_colors("sequential", n=6)` (see *The colour palette* below);
-- **sizing follows niceplots rather than the exact-size approach**: figures
-  are drawn 4 × 3 in (two-column: 8 × 6 in) and LaTeX scales them into the
-  88 mm A&A column, so the 10 pt lettering prints at ≈ 8.7 pt. Include them
-  with `\includegraphics[width=\columnwidth]{fig.pdf}`. For a figure at
-  its exact printed size with the Euclid look, size it for A&A instead:
-  `pa.subplots(journal="aanda")`.
-
-`pa.set_style("euclid", usetex=True)` gives niceplots' LaTeX rendering
-(Computer Modern Sans text). Euclid papers use A&A's `aaEC` class, so
-`pa.authorlist(..., journal="euclid")` produces the A&A author block.
 
 The only hard dependency is matplotlib; plotastro works with both NumPy 1.x
 and 2.x (CI tests each). [CMasher](https://cmasher.readthedocs.io) colours
@@ -175,79 +148,20 @@ fig, axes = pa.subplots(2, 2, width="full")        # 2x2 grid, full width
 fig, axes = pa.subplots(1, 2, width="full", aspect=0.75, sharey=True)
 ```
 
-### The colour palette
-
-![default palette](examples/figures/palette.png)
-
-The default cycle has 12 colours, all accessible by name via `pa.COLORS`
-(e.g. `pa.COLORS["blue"]`), or as matplotlib's `"C0"`…`"C11"` shorthands:
-
-- **C0–C8** are a colour-blind-safe re-ordering of the
-  [ColorBrewer](https://colorbrewer2.org) *Set1* qualitative palette
-  (popularised by [Thøger Rivera-Thorsen's CBcycle](https://gist.github.com/thriveth/8560036)).
-  Consecutive colours differ in **lightness as well as hue**, so adjacent
-  lines stay distinguishable under the common deficiencies (deuteranopia,
-  protanopia) *and* in greyscale print; the notorious red–green pair is
-  pushed far apart in the cycle (green is C2, red is C7), so plots with a
-  handful of lines never rely on it.
-- **C9–C11** are light companions (from Tableau's *Color Blind 10*): use them
-  for uncertainty bands, reference curves, or de-emphasised data underneath a
-  saturated line of the same hue.
-
-Matched shades without transparency (better for print and EPS):
-
-```python
-ax.plot(x, y, color=pa.COLORS["blue"])
-ax.fill_between(x, lo, hi, color=pa.lighten(pa.COLORS["blue"], 0.7))
-pa.darken(pa.COLORS["orange"], 0.3)     # the other direction
-```
-
-More palettes ship with the package:
-
-- `pa.OKABE_ITO` — [Okabe & Ito (2008)](https://jfly.uni-koeln.de/color/),
-  *the* classic CVD-safe recommendation for categorical colours in science;
-- `pa.PETROFF10` — [Petroff (2021)](https://arxiv.org/abs/2107.02270), the
-  CVD-optimised 10-colour cycle used across particle physics;
-- `pa.PETROFF8` — Petroff's 8-colour sibling, the default cycle of the
-  Euclid Consortium's [niceplots](https://gitlab.euclid-sgs.uk/ECEB/niceplots)
-  (and of the `euclid` style here);
-- `pa.TOL_VIBRANT` — [Paul Tol's](https://personal.sron.nl/~pault/) *vibrant*
-  qualitative scheme, 7 CVD-safe colours;
-- `pa.PAIRED` — light/dark pairs for data/model or before/after comparisons:
-  `pa.PAIRED["blue"]` → `("#a6cee3", "#1f78b4")`.
-
-Any of them can become the active cycle when you activate a style —
-`pa.set_style("mnras", palette="okabe_ito")` — or pass your own list of
-colours. The colour schemes of the Euclid Consortium's niceplots are also
-available under their niceplots names (adapted from that repository):
-`pa.euclid_colors()` takes `"categorical1"` (Petroff-8), `"categorical2"`
-(Okabe & Ito), `"categorical3"` (black + Tol vibrant), `"sequential"` (`n`
-colours from `copper`) or `"diverging"` (`n` colours from `coolwarm`):
-
-```python
-pa.set_style("euclid", palette="diverging")                    # by name
-ax.set_prop_cycle(color=pa.euclid_colors("sequential", n=6))   # per axes
-```
-
-**Colormaps:** the styles default to `viridis` (perceptually uniform,
-CVD-safe). Good picks: `viridis`/`magma`/`cividis` for sequential data,
-`RdBu_r` or `coolwarm` for diverging data (red–*blue*, not red–green). Avoid
-`jet`/`rainbow`. Change the default with `pa.set_style("mnras", cmap="cividis")`.
-For many more maps, use CMasher (next section) or
-[cmocean](https://matplotlib.org/cmocean/).
-
-### CMasher colours and colormaps (optional)
+### Colours
 
 ![CMasher colours and colormaps](examples/figures/cmasher.png)
 
-[CMasher](https://cmasher.readthedocs.io) (van der Velden 2020,
-[JOSS 5, 2004](https://doi.org/10.21105/joss.02004)) is a collection of
+For colours, plotastro recommends [CMasher](https://cmasher.readthedocs.io)
+(van der Velden 2020, [JOSS 5, 2004](https://doi.org/10.21105/joss.02004)):
 perceptually uniform scientific colormaps (sequential, diverging and
-cyclic), most of them colour-vision-deficiency friendly. plotastro can use
-it for both discrete colours and colormaps, but it is **not a dependency**.
-Install it only if you want it (`pip install cmasher`, or
-`pip install "plotastro[cmasher]"`); plotastro imports it only when you ask
-for a CMasher colour. Names start with `cmr.`, as in CMasher itself:
+cyclic), most of them colour-vision-deficiency friendly. In its sequential
+maps the lightness rises steadily from one end to the other, so colours
+sampled from them stay distinct for readers with a colour-vision deficiency
+*and* in greyscale print. CMasher is **not a dependency**. Install it only
+if you want it (`pip install cmasher`, or `pip install "plotastro[cmasher]"`);
+plotastro imports it only when you ask for a CMasher colour. Names start
+with `cmr.`, as in CMasher itself:
 
 ```python
 pa.set_style("mnras", palette="cmr.rainforest")    # 8-colour cycle from a CMasher map
@@ -268,6 +182,15 @@ map with a fixed number of lines, sample exactly that many:
 `pa.cmasher_colors("rainforest", n=len(models))`. Please cite CMasher if
 you use it (`cmasher.get_bibtex()`).
 
+Matched shades without transparency (better for print and EPS than `alpha=`):
+
+```python
+color = pa.cmasher_colors("torch", n=3, cmap_range=(0.3, 0.8))[0]
+ax.plot(x, y, color=color)
+ax.fill_between(x, lo, hi, color=pa.lighten(color, 0.6))
+pa.darken(color, 0.3)     # the other direction
+```
+
 The [colours page of the documentation](https://plotastro.readthedocs.io/en/latest/colors.html)
 has more: which map suits which kind of data, lines coloured by a
 parameter with a colour bar, diverging and cyclic data, and common
@@ -278,21 +201,44 @@ examples.
 
 ![CVD check](examples/figures/cvd_check.png)
 
-Don't take the palette's word for it — simulate it
-(Machado et al. 2009 model, no extra dependencies):
+Don't take any palette's word for it — simulate it
+(Machado et al. 2009 model, no extra dependencies). The figure shows the 8
+colours of `palette="cmr.rainforest"`: they stay distinct under each
+simulation, because each colour is lighter than the one before.
 
 ```python
-pa.check_colors()                 # any palette under deuteranopia/protanopia/greyscale
-pa.check_colors(pa.PAIRED)        # works on your own colour lists/dicts too
+colors = pa.cmasher_colors("rainforest")
+pa.check_colors(colors)           # under deuteranopia, protanopia and greyscale
 pa.check_figure(fig)              # simulate a whole rendered figure — the
                                   # final check before submission
-pa.simulate_cvd("#e41a1c", "deuteranopia")   # the raw transform
+pa.simulate_cvd(colors, "deuteranopia")      # the raw transform
 ```
 
 If two lines merge in any panel, add markers or dash patterns (below), or
-pick colours further apart in the cycle. MNRAS recommends
+sample fewer colours so they are further apart. MNRAS recommends
 [Color Oracle](https://colororacle.org) and ColorBrewer for exactly this;
 now it's built in.
+
+### Without CMasher
+
+Without a `palette=`, the styles use plotastro's default cycle, `pa.COLORS`
+(matplotlib's `"C0"`…`"C11"`): a reordering of ColorBrewer *Set1* with
+three light colours from Tableau's *Color Blind 10*. Also shipped:
+`pa.OKABE_ITO` ([Okabe & Ito 2008](https://jfly.uni-koeln.de/color/)),
+`pa.PETROFF10` and `pa.PETROFF8` ([Petroff 2021](https://arxiv.org/abs/2107.02270)),
+`pa.TOL_VIBRANT` ([Paul Tol](https://personal.sron.nl/~pault/)) and
+`pa.PAIRED` (light/dark pairs); any of them can be the cycle:
+`pa.set_style("mnras", palette="okabe_ito")`. These palettes pick colours by
+hue, so they are not reliably accessible: every one of them has pairs that
+print as the same grey, and in the default cycle brown and red are also
+hard to tell apart with protanopia. If you use them, pair the colours with
+markers or dash patterns (below) and check with `pa.check_figure(fig)`.
+
+The styles' default colormap is `viridis` (perceptually uniform, CVD-safe).
+Good matplotlib picks: `viridis`/`magma`/`cividis` for sequential data,
+`RdBu_r` or `coolwarm` for diverging data (red–*blue*, not red–green). Avoid
+`jet`/`rainbow`. Change the default with `pa.set_style("mnras", cmap="cividis")`,
+or see [cmocean](https://matplotlib.org/cmocean/).
 
 ### Markers
 
@@ -364,9 +310,8 @@ your manuscript (custom macros, real kerning):
 pa.set_style("mnras", usetex=True)   # needs latex + dvipng + ghostscript
 ```
 
-This loads the `newtx` Times fonts (matching the MNRAS/A&A house font),
-Helvetica for Nature Astronomy, or plain Computer Modern Sans for the Euclid
-style (as niceplots does). Develop with `usetex=False`, flip it on for the
+This loads the `newtx` Times fonts (matching the MNRAS/A&A house font), or
+Helvetica for Nature Astronomy and the chemistry styles. Develop with `usetex=False`, flip it on for the
 final version — LaTeX rendering is slow.
 
 ### Saving figures
@@ -457,9 +402,8 @@ complete example.
 | `savefig(name, formats=("pdf",))` | save one figure in several formats |
 | `label_panels(axes, ...)` | (a), (b), (c) panel labels |
 | `style_cycler(markers=, linestyles=)` | redundant-encoding property cycle |
-| `COLORS`, `CYCLE`, `OKABE_ITO`, `PETROFF8`, `PETROFF10`, `TOL_VIBRANT`, `PAIRED` | palettes |
-| `euclid_colors(scheme, n=)` | the Euclid niceplots colour schemes, by name |
 | `cmasher_colors(cmap, n=, cmap_range=)`, `cmasher_cmap(cmap, cmap_range=, n=)` | CMasher colours / colormaps (optional `cmasher` package) |
+| `COLORS`, `CYCLE`, `OKABE_ITO`, `PETROFF8`, `PETROFF10`, `TOL_VIBRANT`, `PAIRED` | built-in palettes |
 | `lighten(c, f)`, `darken(c, f)` | matched shades without transparency |
 | `simulate_cvd`, `check_colors`, `check_figure` | colour-vision-deficiency checks |
 | `MARKERS`, `LINESTYLES` | curated marker / dash-pattern sequences |
@@ -511,7 +455,7 @@ files (CI checks they stay in sync). Releases: bump the version in
 
 - Original MNRAS style this grew from:
   [M. Knabenhans' mplstyle_for_MNRAS](https://github.com/miknab/mplstyle_for_MNRAS)
-- Colour-blind-friendly Set1 ordering:
+- Set1 ordering of the default cycle:
   [Thøger Rivera-Thorsen](https://gist.github.com/thriveth/8560036);
   light colours from Tableau *Color Blind 10*
 - Palettes: [Okabe & Ito](https://jfly.uni-koeln.de/color/),
@@ -520,10 +464,6 @@ files (CI checks they stay in sync). Releases: bump the version in
 - Optional colormaps: [CMasher](https://cmasher.readthedocs.io)
   (E. van der Velden 2020, JOSS 5, 2004; BSD-3-Clause), used as an optional
   dependency, not bundled
-- Euclid style and colour schemes adapted from the Euclid Consortium
-  Editorial Board's [niceplots](https://gitlab.euclid-sgs.uk/ECEB/niceplots)
-  (Lukas Hergt and Laila Linke; GPL-3.0, Euclid-internal) — settings
-  re-expressed in plotastro's own template, nothing copied
 - CVD model: Machado, Oliveira & Fernandes (2009), IEEE TVCG 15(6)
 - Figure-size approach after
   [Jack Walton's guide](https://jwalton.info/Embed-Publication-Matplotlib-Latex/)

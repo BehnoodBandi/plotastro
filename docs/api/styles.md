@@ -39,7 +39,6 @@ journal prints them. {doc}`../journals` describes each journal and
 | `prd` | Physical Review D (REVTeX 4.2); also the other *Physical Review* journals | `prl`, `aps`, `revtex` |
 | `jcap` | J. of Cosmology and Astroparticle Physics | |
 | `natastro` | Nature Astronomy | `nature`, `natureastronomy`, `natastron` |
-| `euclid` | Euclid Consortium (A&A, niceplots look) | `ec`, `euclidconsortium`, `niceplots` |
 | `rsc` | Royal Society of Chemistry journals | `royalsocietyofchemistry` |
 | `acs` | American Chemical Society journals | `americanchemicalsociety`, `jacs`, `achemso` |
 | `thesis` | A4 thesis text width (MNRAS look) | |
@@ -59,7 +58,7 @@ plt.style.use("mnras")
 ```
 
 The registered names are the style files: `mnras`, `rasti`, `aanda`,
-`apj`, `oja`, `prd`, `jcap`, `natastro`, `euclid`, `rsc` and `acs`. Each sets the
+`apj`, `oja`, `prd`, `jcap`, `natastro`, `rsc` and `acs`. Each sets the
 journal's fonts, ticks and colour cycle, and a one-column default figure
 size. Aliases, the `thesis` and `beamer` presets, and the extra options
 (`usetex`, `grid`, `palette`, `cmap`) are only available through
@@ -95,9 +94,6 @@ size. Aliases, the `thesis` and `beamer` presets, and the extra options
        journal's fonts.
    ``"name"``
        The journal's full name.
-   ``"aspect"`` (optional)
-       Default height/width ratio, if not :data:`GOLDEN`. Only ``euclid``
-       has one (0.75).
 
    .. code-block:: python
 
@@ -108,7 +104,7 @@ size. Aliases, the `thesis` and `beamer` presets, and the extra options
    :type: float
 
    The golden ratio, (√5 − 1)/2 ≈ 0.618: the default height/width ratio
-   of a panel in :func:`figsize` (except for ``euclid``, which uses 4:3).
+   of a panel in :func:`figsize`.
 
 .. py:data:: STYLE_DIR
    :type: pathlib.Path

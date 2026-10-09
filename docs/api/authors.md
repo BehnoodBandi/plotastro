@@ -15,7 +15,7 @@ example output.
 | `journal=` | format |
 |---|---|
 | `mnras`, `rasti` | MNRAS `\author[...]{...}` block with superscripts and a `\thanks` e-mail |
-| `aanda`, `euclid` | A&A `\inst{...}` and `\institute{...}` (`euclid` for the `aaEC` class) |
+| `aanda` | A&A `\inst{...}` and `\institute{...}` |
 | `apj`, `oja` | AASTeX `\author[orcid]{...}`, `\affiliation`, `\correspondingauthor` |
 | `prd` | REVTeX `\author`, `\email`, `\affiliation` |
 | `jcap` | jcappub lettered `\affiliation[a]` and `\emailAdd` |
