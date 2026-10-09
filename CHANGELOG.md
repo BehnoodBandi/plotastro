@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.1.1 — 2026-10-09
 
 ### Added
 - `rsc` style for all Royal Society of Chemistry journals (8.3 cm /
